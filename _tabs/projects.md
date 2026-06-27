@@ -7,7 +7,7 @@ order: 2
 
 <div style="display: flex; flex-direction: column; gap: 1.5rem;">
 
-  <a href="/posts/i-built-a-market-news-bot-and-just-spent-all-my-time-to-stop-it-from-lying/" style="text-decoration: none; color: inherit;">
+  <a href="/posts/markets_bot/" style="text-decoration: none; color: inherit;">
     <div style="border: 1px solid var(--border-color, #444); border-radius: 8px; padding: 1.25rem 1.5rem; transition: border-color 0.2s;">
       <h3 style="margin: 0 0 0.5rem;">📰 Financial News Bot</h3>
       <p style="margin: 0 0 0.75rem; opacity: 0.8;">A fully automated daily market brief delivered over Telegram. Two-model LLM pipeline (Llama 3.3 70B + Llama 4 Scout) with Python guardrails for hallucination prevention and 4-source price arbitration.</p>
