@@ -5,42 +5,30 @@ icon: fas fa-code-branch
 order: 2
 ---
 
-## Financial News Bot
+<div style="display: flex; flex-direction: column; gap: 1.5rem;">
 
-A fully automated daily market brief delivered over Telegram. Every morning it pulls market headlines from RSS feeds (MarketWatch, CNBC, Investing.com) and per-ticker company news from Finnhub, retrieves closing prices from four independent sources (moomoo OpenD, Finnhub, yfinance, Twelve Data), and pipes everything through a two-model LLM pipeline on Groq's free tier (Llama 3.3 70B as reader, Llama 4 Scout as writer).
+  <a href="/posts/i-built-a-market-news-bot-and-just-spent-all-my-time-to-stop-it-from-lying/" style="text-decoration: none; color: inherit;">
+    <div style="border: 1px solid var(--border-color, #444); border-radius: 8px; padding: 1.25rem 1.5rem; transition: border-color 0.2s;">
+      <h3 style="margin: 0 0 0.5rem;">📰 Financial News Bot</h3>
+      <p style="margin: 0 0 0.75rem; opacity: 0.8;">A fully automated daily market brief delivered over Telegram. Two-model LLM pipeline (Llama 3.3 70B + Llama 4 Scout) with Python guardrails for hallucination prevention and 4-source price arbitration.</p>
+      <small style="opacity: 0.6;">Python · Groq API · Finnhub · Telegram · moomoo OpenD</small>
+    </div>
+  </a>
 
-The system is designed around the principle that **a rule in code is a guarantee, a rule in a prompt is just a request**. A Python post-processing layer enforces hard constraints the model cannot override: direction-sanity checks, causal-inversion guards, and a four-source price arbitration system that only publishes a figure when at least two independent sources agree. 72 regression tests, all green.
+  <a href="https://github.com/chernteh" target="_blank" style="text-decoration: none; color: inherit;">
+    <div style="border: 1px solid var(--border-color, #444); border-radius: 8px; padding: 1.25rem 1.5rem; transition: border-color 0.2s;">
+      <h3 style="margin: 0 0 0.5rem;">📈 Systematic Quant Trading Pipeline</h3>
+      <p style="margin: 0 0 0.75rem; opacity: 0.8;">Role-separated research pipeline for developing and validating systematic long-only US equity strategies. Three-gate framework: in-sample backtest, OOS walk-forward + Deflated Sharpe validation, and paper-trade execution on moomoo.</p>
+      <small style="opacity: 0.6;">Python · moomoo OpenD API · pandas · scipy</small>
+    </div>
+  </a>
 
-**Stack:** Python, Groq API, Finnhub API, yfinance, Twelve Data, moomoo OpenD, Telegram Bot API
+  <a href="https://github.com/chernteh" target="_blank" style="text-decoration: none; color: inherit;">
+    <div style="border: 1px solid var(--border-color, #444); border-radius: 8px; padding: 1.25rem 1.5rem; transition: border-color 0.2s;">
+      <h3 style="margin: 0 0 0.5rem;">🤖 Claude Agent Ecosystem</h3>
+      <p style="margin: 0 0 0.75rem; opacity: 0.8;">Personal agent ecosystem covering blog research, SRM exam prep, portfolio advisory, and a 4-agent QA panel (Correctness, Assumption, Devil's Advocate, Synthesis) for rigorous output validation.</p>
+      <small style="opacity: 0.6;">Claude Code · Python · MCP</small>
+    </div>
+  </a>
 
----
-
-## Systematic Quant Trading Pipeline
-
-A role-separated research pipeline for developing and validating systematic long-only US equity strategies.
-
-- **quant-strategy** — hypothesis author; builds signals and runs in-sample backtests (Gate 1: must dominate SPY on all metrics including CAGR on 2007–2019 training data including the GFC bear market).
-- **quant-validation** — independent gatekeeper; runs out-of-sample walk-forward validation and Deflated Sharpe Ratio gating (Gate 2: OOS 2020–present). Issues PASS/FAIL only.
-- **quant-execution** — moomoo paper-trade runner and live-vs-backtest reconciliation (Gate 3). Paper by default; real money requires separate per-strategy sign-off.
-
-A Chinese-wall separation between in-sample and out-of-sample data is enforced by design. Lifetime-scoped Holm correction (FWER) is applied across all out-of-sample looks across all sessions.
-
-**Stack:** Python, moomoo OpenD API, pandas, scipy
-
----
-
-## Quant Advisor
-
-A read-only portfolio co-pilot on a real brokerage account. Advises on managing holdings and evaluating new trades; all execution is manual. Two-layer advice architecture: validated signals (Layer A) originate directional calls; technical and news context (Layer B) serve as risk gates only. Every recommendation is logged to a ledger and benchmarked against VOO.
-
-**Stack:** Python, moomoo OpenD API, Finnhub API
-
----
-
-## Claude Agent Ecosystem
-
-A personal agent ecosystem built on Claude Code, covering:
-- **Blog/Research agent** — research, drafting, and QA for blog posts
-- **SRM Study agent** — structured actuarial exam prep with worked examples
-- **Memory hygiene agent** — periodic cleanup of stale context across all agents
-- **QA panel** — four-agent review system (Correctness, Assumption, Devil's Advocate, Synthesis) triggered on demand for rigorous output validation
+</div>
