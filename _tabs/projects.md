@@ -23,7 +23,7 @@ A role-separated research pipeline for developing and validating systematic long
 - **quant-validation** — independent gatekeeper; runs out-of-sample walk-forward validation and Deflated Sharpe Ratio gating (Gate 2: OOS 2020–present). Issues PASS/FAIL only.
 - **quant-execution** — moomoo paper-trade runner and live-vs-backtest reconciliation (Gate 3). Paper by default; real money requires separate per-strategy sign-off.
 
-A Chinese-wall separation between in-sample and out-of-sample data is enforced by design — the same engine is shared but each agent is locked to its designated data partition. Lifetime-scoped Holm correction (FWER) is applied across all out-of-sample looks across all sessions.
+A Chinese-wall separation between in-sample and out-of-sample data is enforced by design. Lifetime-scoped Holm correction (FWER) is applied across all out-of-sample looks across all sessions.
 
 **Stack:** Python, moomoo OpenD API, pandas, scipy
 
