@@ -197,7 +197,8 @@ body {
   transition: border-color 0.2s, transform 0.15s;
 }
 .project-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-.project-card h3 { font-size: 1.05rem; color: var(--text); margin: 0 0 0.5rem; }
+.project-card h3 { font-size: 1.05rem; color: var(--text); margin: 0 0 0.25rem; }
+.project-subtitle { color: var(--text-muted); font-size: 0.85rem; font-style: italic; margin: 0 0 0.75rem !important; }
 .project-card p { color: var(--text-muted); margin: 0 0 0.75rem; font-size: 0.9rem; line-height: 1.65; }
 .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .project-tags span { background: rgba(88,166,255,0.1); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
@@ -205,6 +206,28 @@ body {
 /* ── Post ── */
 .post-title { font-size: 1.8rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
 .post-meta { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+
+/* ── Syntax highlighting (Rouge / Dracula palette) ── */
+.highlight { background: #1c2333; border-radius: 8px; margin: 1.25rem 0; }
+.highlight pre { background: none; border: none; border-radius: 0; margin: 0; padding: 1.25rem; overflow-x: auto; }
+.highlight code { background: none; color: #f8f8f2; font-size: 0.85rem; line-height: 1.6; font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace; }
+
+/* tokens */
+.highlight .k,  .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt { color: #ff79c6; font-weight: bold; } /* keywords */
+.highlight .s,  .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc, .highlight .sd,
+.highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .ss { color: #f1fa8c; } /* strings */
+.highlight .c,  .highlight .c1, .highlight .cm, .highlight .cp, .highlight .cs              { color: #6272a4; font-style: italic; } /* comments */
+.highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il              { color: #bd93f9; } /* numbers */
+.highlight .nf, .highlight .fm                                                               { color: #50fa7b; } /* functions */
+.highlight .nb                                                                               { color: #8be9fd; } /* builtins */
+.highlight .nc                                                                               { color: #8be9fd; font-weight: bold; } /* class names */
+.highlight .o,  .highlight .ow                                                               { color: #ff79c6; } /* operators */
+.highlight .na, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi              { color: #f8f8f2; } /* variables */
+.highlight .nn                                                                               { color: #8be9fd; } /* namespace */
+.highlight .p                                                                                { color: #f8f8f2; } /* punctuation */
+.highlight .err                                                                              { color: #ff5555; } /* errors */
+.highlight .gi                                                                               { color: #50fa7b; } /* diff add */
+.highlight .gd                                                                               { color: #ff5555; } /* diff del */
 
 /* ── Section header ── */
 .section-title { font-size: 1.5rem; color: var(--text); margin-bottom: 0.4rem; }
