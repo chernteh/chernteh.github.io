@@ -200,13 +200,7 @@ The guard does not rewrite these sentences into correct explanations. It **delet
 
 Running underneath both sanity checks is a single governing discipline: **when in doubt, reject, don't patch.** So the system's failure mode is silence. *"No clear catalyst in today's headlines"* is allowed to be the final word with no hedging after it.
 
-## 8. Did any of this actually work?
-
-**A network-free test suite** (currently 72 tests, all green)
-
- Each guard was born from a specific failure (the gold-peace lie, the silver-collapsed-on-a-green-day contradiction). Instead of just fixing the bug and moving on, tests were written that reproduces that exact failure scenario. Now if I ever accidentally weaken or break a guard, that test will turn red immediately.
-
-## 9. Limitations
+## 8. Limitations
 
 - **Guards can only catch known failure modes, not unknown ones.** Every guard here exists because the model already burned me in that specific way once. The gold-peace guard does nothing about the *next* category of confident nonsense I haven't seen yet. This is a catalogue of caught lies, not a proof of honesty.
 - **Rules trade false negatives for false positives.** A guard that deletes "suspicious" sentences will occasionally delete a *true* one: a correctly-reasoned causal claim that happens to trip a pattern. I've chosen that trade deliberately (a missing sentence beats a false one), but it is a real cost, and on a quiet news day it can make the brief terser than it needs to be.
@@ -215,7 +209,7 @@ Running underneath both sanity checks is a single governing discipline: **when i
 
 I'll continue working on these next month.
 
-## 10. If you want to build one for yourself too
+## 9. If you want to build one for yourself too
 
 I started out thinking I was only building a summariser. Turns out, I was actually building a *referee*, a layer that lets a creative, yet unreliable model do the part it's good at, while quietly refusing to let it speak on the things it gets wrong.
 
