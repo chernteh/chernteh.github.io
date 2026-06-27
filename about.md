@@ -1,8 +1,6 @@
 ---
 layout: page
 title: About Me
-icon: fas fa-user
-order: 1
 ---
 
 I'm Chern, a final-year undergraduate at the **National University of Singapore (NUS)**, majoring in Mathematics with a Second Major in Quantitative Finance, graduating in 2027.
