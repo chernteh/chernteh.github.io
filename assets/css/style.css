@@ -207,27 +207,31 @@ body {
 .post-title { font-size: 1.8rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
 .post-meta { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
 
-/* ── Syntax highlighting (Rouge / Dracula palette) ── */
-.highlight { background: #1c2333; border-radius: 8px; margin: 1.25rem 0; }
+/* ── Syntax highlighting (VS Code Dark+ palette) ── */
+.highlight { background: #000000; border-radius: 8px; margin: 1.25rem 0; border: 1px solid #333; }
 .highlight pre { background: none; border: none; border-radius: 0; margin: 0; padding: 1.25rem; overflow-x: auto; }
-.highlight code { background: none; color: #f8f8f2; font-size: 0.85rem; line-height: 1.6; font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace; }
+.highlight code { background: none; color: #d4d4d4; font-size: 0.85rem; line-height: 1.6; font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace; }
+.page-body code { background: #111; color: #d4d4d4; }
 
-/* tokens */
-.highlight .k,  .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt { color: #ff79c6; font-weight: bold; } /* keywords */
-.highlight .s,  .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc, .highlight .sd,
-.highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .ss { color: #f1fa8c; } /* strings */
-.highlight .c,  .highlight .c1, .highlight .cm, .highlight .cp, .highlight .cs              { color: #6272a4; font-style: italic; } /* comments */
-.highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il              { color: #bd93f9; } /* numbers */
-.highlight .nf, .highlight .fm                                                               { color: #50fa7b; } /* functions */
-.highlight .nb                                                                               { color: #8be9fd; } /* builtins */
-.highlight .nc                                                                               { color: #8be9fd; font-weight: bold; } /* class names */
-.highlight .o,  .highlight .ow                                                               { color: #ff79c6; } /* operators */
-.highlight .na, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi              { color: #f8f8f2; } /* variables */
-.highlight .nn                                                                               { color: #8be9fd; } /* namespace */
-.highlight .p                                                                                { color: #f8f8f2; } /* punctuation */
-.highlight .err                                                                              { color: #ff5555; } /* errors */
-.highlight .gi                                                                               { color: #50fa7b; } /* diff add */
-.highlight .gd                                                                               { color: #ff5555; } /* diff del */
+/* tokens — VS Code Dark+ */
+.highlight .k,  .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr             { color: #569cd6; } /* keywords: blue */
+.highlight .kt                                                                               { color: #4ec9b0; } /* type keywords: teal */
+.highlight .s,  .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc,
+.highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx,
+.highlight .sr, .highlight .ss                                                               { color: #ce9178; } /* strings: orange */
+.highlight .c,  .highlight .c1, .highlight .cm, .highlight .cp, .highlight .cs              { color: #6a9955; font-style: italic; } /* comments: green */
+.highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il              { color: #b5cea8; } /* numbers: light green */
+.highlight .nf, .highlight .fm                                                               { color: #dcdcaa; } /* functions: yellow */
+.highlight .nb                                                                               { color: #4fc1ff; } /* builtins: light blue */
+.highlight .nc                                                                               { color: #4ec9b0; } /* class names: teal */
+.highlight .o,  .highlight .ow                                                               { color: #d4d4d4; } /* operators: white */
+.highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi                              { color: #9cdcfe; } /* variables: light blue */
+.highlight .na                                                                               { color: #9cdcfe; } /* attributes */
+.highlight .nn                                                                               { color: #4ec9b0; } /* namespace */
+.highlight .p                                                                                { color: #d4d4d4; } /* punctuation */
+.highlight .err                                                                              { color: #f44747; } /* errors: red */
+.highlight .gi                                                                               { color: #6a9955; } /* diff add */
+.highlight .gd                                                                               { color: #f44747; } /* diff del */
 
 /* ── Section header ── */
 .section-title { font-size: 1.5rem; color: var(--text); margin-bottom: 0.4rem; }
