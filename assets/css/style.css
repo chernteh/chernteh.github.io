@@ -208,10 +208,10 @@ body {
 .post-meta { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
 
 /* ── Syntax highlighting (VS Code Dark+ palette) ── */
-.highlight { background: #0b0f17; border-radius: 8px; margin: 1.25rem 0; border: 1px solid var(--border); }
+.highlight { background: #080c13; border-radius: 8px; margin: 1.25rem 0; border: 1px solid var(--border); }
 .highlight pre { background: none; border: none; border-radius: 0; margin: 0; padding: 1.25rem; overflow-x: auto; }
 .highlight code { background: none; color: #d4d4d4; font-size: 0.85rem; line-height: 1.6; font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace; }
-.page-body code { background: #0b0f17; color: #d4d4d4; }
+.page-body code { background: #080c13; color: #d4d4d4; }
 
 /* tokens — VS Code Dark+ */
 .highlight .k,  .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr             { color: #569cd6; } /* keywords: blue */
