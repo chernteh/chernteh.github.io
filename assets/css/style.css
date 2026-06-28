@@ -3,7 +3,7 @@
 :root {
   --bg:             #0d1117;
   --sidebar-bg:     #161b22;
-  --sidebar-width:  300px;
+  --sidebar-width:  280px;
   --nav-active:     #1d3a5f;
   --text:           #e6edf3;
   --text-muted:     #8b949e;
@@ -83,11 +83,11 @@ body {
 .sidebar-top { text-align: center; }
 
 .avatar-circle {
-  width: 143px;
-  height: 143px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background: var(--border) url('/assets/img/avatar.png') center/cover no-repeat;
-  margin: 0 auto 1.25rem;
+  margin: 0 auto 1.5rem;
   border: 3px solid var(--border);
 }
 
@@ -135,7 +135,7 @@ body {
 }
 .sidebar-social a {
   color: var(--text-muted);
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   text-decoration: none;
   transition: color 0.15s;
 }
