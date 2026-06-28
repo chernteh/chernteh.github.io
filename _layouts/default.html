@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Apply saved/OS theme before paint to avoid a flash of the wrong theme -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
   <meta name="description" content="{{ page.description | default: site.description }}">
   <title>{% if page.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
 
@@ -79,12 +90,41 @@
     </aside>
 
     <main class="main-content">
-      <div class="banner"></div>
+      <div class="banner">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light mode">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
+      </div>
       <div class="page-body">
         {{ content }}
       </div>
     </main>
 
   </div>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      function syncIcon() {
+        var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        btn.innerHTML = isLight
+          ? '<i class="fas fa-sun" aria-hidden="true"></i>'
+          : '<i class="fas fa-moon" aria-hidden="true"></i>';
+      }
+      syncIcon();
+      btn.addEventListener('click', function () {
+        var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        if (isLight) {
+          document.documentElement.removeAttribute('data-theme');
+          try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          try { localStorage.setItem('theme', 'light'); } catch (e) {}
+        }
+        syncIcon();
+      });
+    })();
+  </script>
 </body>
 </html>

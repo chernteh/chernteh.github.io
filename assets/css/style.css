@@ -1,15 +1,78 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ════════════════════════════════════════════════════════════
+   THEME TOKENS
+   Dark (default) = GitHub-dev aesthetic.
+   Light ([data-theme="light"]) = Cupertino / Apple Light.
+   Set data-theme on <html>; toggle persists in localStorage and
+   defaults to the visitor's OS preference (see _layouts/default.html).
+   ════════════════════════════════════════════════════════════ */
 :root {
+  --sidebar-width:  280px;
+
+  /* interface */
   --bg:             #0d1117;
   --sidebar-bg:     #161b22;
-  --sidebar-width:  280px;
+  --card-bg:        #161b22;
   --nav-active:     #1d3a5f;
   --text:           #e6edf3;
+  --body-text:      #d0d7de;
   --text-muted:     #8b949e;
   --accent:         #58a6ff;
   --border:         #21262d;
-  --card-bg:        #161b22;
+  --hover-bg:       rgba(255,255,255,0.06);
+  --accent-soft:    rgba(88,166,255,0.10);
+  --accent-faint:   rgba(88,166,255,0.05);
+
+  /* banner */
+  --banner:         linear-gradient(135deg, #0d1b2a 0%, #1a2744 40%, #162032 70%, #0a1020 100%);
+  --banner-glow:    radial-gradient(ellipse at 70% 50%, rgba(88,166,255,0.12) 0%, transparent 65%);
+
+  /* code + syntax (VS Code Dark+) */
+  --code-bg:        #080c13;
+  --code-base:      #d4d4d4;
+  --sx-keyword:     #569cd6;
+  --sx-type:        #4ec9b0;
+  --sx-string:      #ce9178;
+  --sx-comment:     #6a9955;
+  --sx-number:      #b5cea8;
+  --sx-func:        #dcdcaa;
+  --sx-builtin:     #4fc1ff;
+  --sx-var:         #9cdcfe;
+  --sx-error:       #f44747;
+}
+
+:root[data-theme="light"] {
+  /* interface — Apple Light */
+  --bg:             #f5f5f7;
+  --sidebar-bg:     #ffffff;
+  --card-bg:        #ffffff;
+  --nav-active:     #e8e8ed;
+  --text:           #1d1d1f;
+  --body-text:      #424245;
+  --text-muted:     #86868b;
+  --accent:         #0071e3;
+  --border:         #d2d2d7;
+  --hover-bg:       rgba(0,0,0,0.05);
+  --accent-soft:    rgba(0,113,227,0.10);
+  --accent-faint:   rgba(0,113,227,0.06);
+
+  /* banner — soft light wash */
+  --banner:         linear-gradient(135deg, #eef1f6 0%, #e3ebf5 40%, #eaf0f7 70%, #f0f0f3 100%);
+  --banner-glow:    radial-gradient(ellipse at 70% 50%, rgba(0,113,227,0.10) 0%, transparent 65%);
+
+  /* code + syntax (Xcode Default Light) */
+  --code-bg:        #ececf0;
+  --code-base:      #1d1d1f;
+  --sx-keyword:     #9b2393;
+  --sx-type:        #0b4f79;
+  --sx-string:      #c41a16;
+  --sx-comment:     #707f8c;
+  --sx-number:      #1c00cf;
+  --sx-func:        #3e8087;
+  --sx-builtin:     #5b269a;
+  --sx-var:         #326d74;
+  --sx-error:       #c41a16;
 }
 
 body {
@@ -18,6 +81,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
   line-height: 1.6;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* ── Accessibility ── */
@@ -47,17 +111,46 @@ body {
   width: 100%;
   height: 280px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #0d1b2a 0%, #1a2744 40%, #162032 70%, #0a1020 100%);
+  background: var(--banner);
   position: relative;
   overflow: hidden;
+  transition: background 0.25s ease;
   /* To use your own image: background: url('/assets/img/banner.jpg') center/cover; */
 }
 .banner::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 70% 50%, rgba(88,166,255,0.12) 0%, transparent 65%);
+  background: var(--banner-glow);
 }
+
+/* ── Theme toggle (top-right of banner) ── */
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.28);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+.theme-toggle:hover { transform: scale(1.08); background: rgba(0,0,0,0.42); }
+:root[data-theme="light"] .theme-toggle {
+  background: rgba(255,255,255,0.72);
+  border-color: rgba(0,0,0,0.12);
+  color: #1d1d1f;
+}
+:root[data-theme="light"] .theme-toggle:hover { background: rgba(255,255,255,0.92); }
 
 /* ── Page body ── */
 .page-body {
@@ -79,6 +172,7 @@ body {
   display: flex;
   flex-direction: column;
   z-index: 50;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .sidebar-inner {
@@ -131,7 +225,7 @@ body {
   border-radius: 6px;
   transition: color 0.15s, background 0.15s;
 }
-.nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+.nav-link:hover { color: var(--text); background: var(--hover-bg); }
 .nav-link.active { color: var(--text); background: var(--nav-active); }
 
 .sidebar-social {
@@ -153,39 +247,41 @@ body {
 .page-body h1 { font-size: 2.25rem; color: var(--text); margin-bottom: 0.5rem; }
 .page-body h2 { font-size: 1.6rem; color: var(--text); margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
 .page-body h3 { font-size: 1.2rem; color: var(--text); margin: 1.25rem 0 0.5rem; }
-.page-body p { color: #d0d7de; margin-bottom: 0.9rem; line-height: 1.75; }
+.page-body p { color: var(--body-text); margin-bottom: 0.9rem; line-height: 1.75; }
 .page-body a { color: var(--accent); text-decoration: none; }
 .page-body a:hover { text-decoration: underline; }
 .page-body ul, .page-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
-.page-body li { color: #d0d7de; margin-bottom: 0.3rem; line-height: 1.7; }
+.page-body li { color: var(--body-text); margin-bottom: 0.3rem; line-height: 1.7; }
 .page-body strong { color: var(--text); font-weight: 600; }
 
 .page-body blockquote {
   border-left: 3px solid var(--accent);
   padding: 0.5rem 1rem;
   margin: 1rem 0;
-  background: rgba(88,166,255,0.05);
+  background: var(--accent-faint);
   border-radius: 0 6px 6px 0;
 }
 .page-body blockquote p { margin: 0; font-style: italic; }
 
+/* inline code */
 .page-body code {
-  background: #1c2333;
-  color: #f0a500;
+  background: var(--code-bg);
+  color: var(--code-base);
   padding: 0.15em 0.4em;
   border-radius: 4px;
   font-size: 0.875em;
   font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
 }
+/* plain (non-highlighted) pre */
 .page-body pre {
-  background: #1c2333;
+  background: var(--code-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
   overflow-x: auto;
   margin: 1.25rem 0;
 }
-.page-body pre code { background: none; padding: 0; color: #e6edf3; font-size: 0.85rem; line-height: 1.6; }
+.page-body pre code { background: none; padding: 0; color: var(--code-base); font-size: 0.85rem; line-height: 1.6; }
 
 .page-body table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.9rem; }
 .page-body th { background: var(--sidebar-bg); color: var(--text); font-weight: 600; padding: 0.6rem 1rem; border: 1px solid var(--border); text-align: left; }
@@ -202,14 +298,14 @@ body {
   text-decoration: none !important;
   color: inherit;
   background: var(--card-bg);
-  transition: border-color 0.2s, transform 0.15s;
+  transition: border-color 0.2s, transform 0.15s, background-color 0.25s ease;
 }
 .project-card:hover { border-color: var(--accent); transform: translateY(-1px); }
 .project-card h3 { font-size: 1.05rem; color: var(--text); margin: 0 0 0.25rem; }
 .project-subtitle { color: var(--text-muted); font-size: 0.85rem; font-style: italic; margin: 0 0 0.75rem !important; }
 .project-card p { color: var(--text-muted); margin: 0 0 0.75rem; font-size: 0.9rem; line-height: 1.65; }
 .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.project-tags span { background: rgba(88,166,255,0.1); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+.project-tags span { background: var(--accent-soft); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 
 /* Leave breathing room above a heading when jumped to via a TOC anchor. */
 /* Always reserve scrollbar space so the fixed sidebar stays put across pages. */
@@ -289,31 +385,29 @@ article h2, article h3 { scroll-margin-top: 3.5rem; }
 .post-title { font-size: 2.25rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
 .post-meta { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
 
-/* ── Syntax highlighting (VS Code Dark+ palette) ── */
-.highlight { background: #080c13; border-radius: 8px; margin: 1.25rem 0; border: 1px solid var(--border); }
+/* ── Syntax highlighting (themed: VS Code Dark+ / Xcode Light) ── */
+.highlight { background: var(--code-bg); border-radius: 8px; margin: 1.25rem 0; border: 1px solid var(--border); }
 .highlight pre { background: none; border: none; border-radius: 0; margin: 0; padding: 1.25rem; overflow-x: auto; }
-.highlight code { background: none; color: #d4d4d4; font-size: 0.85rem; line-height: 1.6; font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace; }
-.page-body code { background: #080c13; color: #d4d4d4; }
+.highlight code { background: none; color: var(--code-base); font-size: 0.85rem; line-height: 1.6; font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace; }
 
-/* tokens — VS Code Dark+ */
-.highlight .k,  .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr             { color: #569cd6; } /* keywords: blue */
-.highlight .kt                                                                               { color: #4ec9b0; } /* type keywords: teal */
+.highlight .k,  .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr             { color: var(--sx-keyword); } /* keywords */
+.highlight .kt                                                                               { color: var(--sx-type); }    /* type keywords */
 .highlight .s,  .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc,
 .highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx,
-.highlight .sr, .highlight .ss                                                               { color: #ce9178; } /* strings: orange */
-.highlight .c,  .highlight .c1, .highlight .cm, .highlight .cp, .highlight .cs              { color: #6a9955; font-style: italic; } /* comments: green */
-.highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il              { color: #b5cea8; } /* numbers: light green */
-.highlight .nf, .highlight .fm                                                               { color: #dcdcaa; } /* functions: yellow */
-.highlight .nb                                                                               { color: #4fc1ff; } /* builtins: light blue */
-.highlight .nc                                                                               { color: #4ec9b0; } /* class names: teal */
-.highlight .o,  .highlight .ow                                                               { color: #d4d4d4; } /* operators: white */
-.highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi                              { color: #9cdcfe; } /* variables: light blue */
-.highlight .na                                                                               { color: #9cdcfe; } /* attributes */
-.highlight .nn                                                                               { color: #4ec9b0; } /* namespace */
-.highlight .p                                                                                { color: #d4d4d4; } /* punctuation */
-.highlight .err                                                                              { color: #f44747; } /* errors: red */
-.highlight .gi                                                                               { color: #6a9955; } /* diff add */
-.highlight .gd                                                                               { color: #f44747; } /* diff del */
+.highlight .sr, .highlight .ss                                                               { color: var(--sx-string); }  /* strings */
+.highlight .c,  .highlight .c1, .highlight .cm, .highlight .cp, .highlight .cs              { color: var(--sx-comment); font-style: italic; } /* comments */
+.highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il              { color: var(--sx-number); }  /* numbers */
+.highlight .nf, .highlight .fm                                                               { color: var(--sx-func); }    /* functions */
+.highlight .nb                                                                               { color: var(--sx-builtin); } /* builtins */
+.highlight .nc                                                                               { color: var(--sx-type); }    /* class names */
+.highlight .o,  .highlight .ow                                                               { color: var(--code-base); }  /* operators */
+.highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi                              { color: var(--sx-var); }     /* variables */
+.highlight .na                                                                               { color: var(--sx-var); }     /* attributes */
+.highlight .nn                                                                               { color: var(--sx-type); }    /* namespace */
+.highlight .p                                                                                { color: var(--code-base); }  /* punctuation */
+.highlight .err                                                                              { color: var(--sx-error); }   /* errors */
+.highlight .gi                                                                               { color: var(--sx-comment); } /* diff add */
+.highlight .gd                                                                               { color: var(--sx-error); }   /* diff del */
 
 /* ── Section intro ── */
 .section-intro { color: var(--text-muted); margin-bottom: 2rem; }
