@@ -203,6 +203,9 @@ body {
 .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .project-tags span { background: rgba(88,166,255,0.1); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 
+/* Leave breathing room above a heading when jumped to via a TOC anchor. */
+article h2, article h3 { scroll-margin-top: 2rem; }
+
 /* ── Table of Contents ── */
 /* Default (narrow): single column, no TOC. */
 .post-grid { display: block; }
