@@ -23,6 +23,7 @@ exclude:
   - "*.gem"
   - "*.gemspec"
   - README.md
+  - HANDOVER.md
   - LICENSE
   - Gemfile
   - Gemfile.lock
