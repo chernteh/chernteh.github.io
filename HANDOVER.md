@@ -290,6 +290,19 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 
 ## 10. Recent change history (most recent first, for context)
 
+### 2026-06-29 — Experience cards on About Me
+
+- Replaced the plain Experience `<ul>` in [index.html](index.html) with **Apple-style "Wide Media"
+  cards** (chosen from a 5-option preview round): 190px image column on the left + content on the right.
+- **Only the image is clickable** (`<a class="exp-logo">` → company site, new tab); the card body is
+  inert by design so the card can't be clicked by accident. Image fills the column edge-to-edge
+  (`object-fit: cover`); hover gives a gentle zoom + a ↗ badge overlay.
+- New styles in [style.css](assets/css/style.css) under "Experience cards"; `--exp-shadow` token added to
+  **both** themes; `≤900px` media rule narrows the image column to 110px.
+- **Placeholders are live**: logo slots are styled `<div class="exp-logo-ph">` (ASE / PL), `href="#"`,
+  and empty `<p class="exp-blurb">` — all marked with TODO comments. **Pending from Chern:** real logo
+  images (→ `assets/img/`), company URLs, date ranges, descriptions. Swap per the comments in `index.html`.
+
 ### 2026-06-28 — Full design + SEO + a11y session
 
 **Theme system (dark/light toggle)**
