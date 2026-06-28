@@ -58,7 +58,7 @@ Every morning, it repeats the workflow:
 1. **Pulls a pile of market headlines** and per-ticker company news.
 2. **Pulls closing prices** for the indices and for the holdings I track.
 3. **Checks an economic calendar for notable events** in the next week.
-4. Hands all of that to free large language models (*Groq's free tier, running Llama models*) to **generate the report**.
+4. Hands all of that to free LLMs (*Groq's free tier, running Llama models*) to **generate the report**.
 5. **Sends me the generated report** via Telegram.
 
 - The intelligence layer is two free models on Groq's free tier: *Llama 3.3 70B & Llama 4 Scout*. 
@@ -74,11 +74,15 @@ When the model wrote that peace lifted gold prices, my first instinct was to **e
 
 > An additional line: *"Never claim that de-escalation or peace increases the price of safe-haven assets like gold and silver."* 
 
-It was a clear, explicit rule. And it worked. Well... most of the time. But **"most of the time"** isn't good enough when failure only needs to happen once, especially for an unattended model. On the one morning the headlines were unusually persuasive, the model quietly violated the instruction anyway.
+And it worked. Well... most of the time. 
 
-The reason is because the weights are frozen at inference time, a system prompt cannot permanently teach the model a rule. The **instruction exists only as tokens** in the current context window, competing with everything else the model reads. It has no special authority over the fixed weights, which is why a persuasive enough input can override it.
+But **"most of the time"** isn't good enough when failure only needs to happen once, especially for an unattended model. On the one morning the headlines were unusually persuasive, the model quietly violated the instruction anyway.
 
-And you might reasonably think: *Why not run a second model to QA the first?* That is a legitimate and sound technique, but it doesn't resolve the core issue. A QA model would just be another probabilistic component that can be wrong sometimes... and now you have two models that can hallucinate instead of one. For a bot that runs unattended with no human backstop, I didn't want correctness to be **probable**, I wanted the things that must never happen to be **impossible by construction**. That is a job for code, not for a better-behaved model.
+The reason is because the **weights are frozen** at inference time, a system prompt cannot permanently teach the model a rule. **The instruction exists only as tokens** in the current context window, competing with **everything else** the model reads. It **has no special authority** over the weights, which is why a persuasive enough input can override it.
+
+And you might reasonably think: *Why not run a second model to QA the first?* 
+
+That is a legitimate and sound technique, but it doesn't resolve the core issue. A QA model would just be another probabilistic component that can be wrong sometimes... and now you have two models that can hallucinate instead of one. For a bot that runs unattended with no human backstop, I didn't want correctness to be **probable**, I wanted the things that must never happen to be **impossible**. That is a job for code instead, not for a better-behaved model.
 
 So I stopped negotiating with the model and started constraining it instead. And I proceeded to build the project on the basis that:
 
@@ -86,9 +90,9 @@ So I stopped negotiating with the model and started constraining it instead. And
 
 The model never sees a number it is allowed to invent. It does not compute the S&P's daily return, it does not decide whether gold is "up sharply" or "roughly flat," and it does not get to quote a percentage from memory. Python fetches every figure, verifies it, formats it, and pastes it in. The model then writes the story *around* the numbers, but never the numbers themselves.
 
-In a nutshell, this is a **division of labour**, and it runs along two seams.
+In a nutshell, this is a **division of labour**, and it runs along **two seams**.
 
-## 4. The architecture: Python ↔ Model ↔ Python
+## 4. The sandwich architecture: Python ↔ Model ↔ Python
 
 The first seam is between **code and model**, and it is the backbone of the whole system.
 - The model layer does what models are genuinely good at: reading messy natural-language news and writing fluent prose.
@@ -115,9 +119,12 @@ The model is sandwiched between two layers of code:
 
 ## 5. The two-model layer: a reader and a writer
 
-The second seam runs *inside* the model layer, and it's where I made the biggest structural mistake before getting it right.
+The second seam runs inside the model layer, and it's where I made the biggest structural mistake before getting it right.
 
-My first instinct was to hand the whole thing to a single model: 'Here is the full feed of the morning's headlines (dozens of them, most irrelevant), now read all of it *and* write me the brief.' It half-worked, and the way it failed was instructive. A single model asked to both *sift* and *write* does neither well: bury the three headlines that matter inside forty that don't, and its attention smears across the noise. It pads the brief with filler it should have discarded, or fixates on a loud-but-irrelevant headline, because nothing ever forced it to decide what mattered *first*.
+My first instinct was to hand the whole thing to a single model:
+> 'Here is the full feed of the morning's headlines (dozens of them, most irrelevant), now read all of it *and* write me the brief.' 
+
+It half-worked. A single model asked to both *sift* and *write* does neither well. It buries the three headlines that matter inside forty that don't, and its attention smears across the noise. It pads the brief with filler it should have discarded, or fixates on a loud-but-irrelevant headline, because nothing ever forced it to decide what mattered *first*.
 
 So I split the model layer in two, by task:
 
@@ -130,13 +137,15 @@ So I split the model layer in two, by task:
   └───────────────────────────────┘       └──────────────────────────────┘
 ```
 
-The **reader** (Llama 3.3 70B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (Llama 4 Scout, a smaller mixture-of-experts model built for structured output) never sees the noise, only the handful that survived so it can spend all its attention on prose. Rank first, then generate.
+The **reader** (Llama 3.3 70B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (Llama 4 Scout, a smaller mixture-of-experts (MoE) model) never sees the noise, only the handful that survived so it can spend all its attention on prose. Rank first, then generate.
 
-The reason this split helps is a property of how transformers process context. Attention is distributed across all tokens in the context window: when the context is full of irrelevant headlines, the model's ability to focus on the few that matter is diluted across noise. Giving the writer a pre-screened context means its attention is more efficiently allocated to signal rather than wasted on content the ranker already judged irrelevant.
+The reason this split helps is a property of how transformers process context. Attention is distributed across all tokens in the context window. When the context is full of irrelevant headlines, the model's ability to focus on the few that matter is diluted across noise. Giving the writer a pre-screened context means its attention is more efficiently allocated to signal rather than wasted on content the ranker already judged irrelevant.
 
 ## 6. Don't fully trust prices provided by a single source
 
-Free data feeds disagree with each other more than you'd expect. Not dramatically, but often enough to matter. One feed hasn't updated after the close, another reports a stale or split-adjusted figure, a third is just wrong for thirty seconds. If you pipe a single source straight into the brief, you eventually report a number that's false.
+With the model constrained, the next weak point was one layer back, the raw data itself.
+
+Free data feeds disagree with each other more than you'd expect. Not dramatically, but enough to matter. One feed hasn't updated since the close, another is reporting a split-adjusted price as if it were today's. If you pipe a single source straight into the brief, you eventually report a number that's false.
 
 So instead of trusting one source, I poll four: my broker's feed (moomoo's OpenD), Finnhub, yfinance, and Twelve Data. Then make them vote. The arbitration logic is the following:
 
@@ -157,15 +166,15 @@ def arbitrate(sources, tol_pp=1.0):
     return _most_trusted(sources), "sources disagree: verify"
 ```
 
-The rule is simple: **a price is only allowed into the brief if at least two independent sources agree on it to within a percentage point.** If the most trusted source stands alone against the others, it loses. If all four disagree, the number still goes out, but with a visible "verify" flag attached, because a loud admission of uncertainty is much safer than a confident wrong number.
+The rule is simple: **a price is only allowed into the brief if at least two independent sources agree on it to within a percentage point.** If the most trusted source stands alone against the others, it loses. If all four disagree, the number still goes out, but with a visible "verify" flag attached.
 
 It managed to catch a real bug too: QQQM was periodically printing the *index's* percentage instead of its own, and the two-source agreement rule quietly refused to publish the bad figure until a second source backed it up.
 
 ## 7. Catching claims that are false or that don't make sense
 
-Even with verified numbers and complete context, the model still writes sentences that are simply *wrong*, not factually, but in their logic, their causation, or their internal coherence. This is where most of the engineering went: every rule in this section started as a prompt instruction the model eventually violated, and was moved to code. Each guard is a deterministic rule constraining a probabilistic output, a guardrailed pipeline where the model handles language and the guards enforce hard constraints the model cannot override.
+Even with verified numbers and complete context, the model still writes sentences that are simply *wrong*, not factually, but in their logic, their causation, or their internal coherence. Every rule in this section started as a prompt instruction the model eventually violated, and was moved to code. Each guard is a rule constraining a probabilistic output, a guardrailed pipeline where the model handles language and the guards enforce hard constraints the model cannot override.
 
-**(A) Direction sanity.** The model would sometimes lead with a narrative that contradicted the very price it was explaining: *"Silver collapsed on profit-taking…"* on a day SLV closed up over 5%. It had a bearish story cached and reached for it regardless of the tape. The guard judges the **lead clause** against the actual price direction, because the lead clause is where the model smuggles in the stale story before walking it back with a qualifier:
+**(i) Direction sanity.** The model would sometimes lead with a narrative that contradicted the very price it was explaining: *"Silver collapsed on profit-taking…"* on a day SLV closed up over 5%. It had a bearish story cached and reached for it regardless of the tape. The guard judges the **lead clause** against the actual price direction, because the lead clause is where the model smuggles in the stale story before walking it back with a qualifier:
 
 ```python
 # catch when the opening sentence says the opposite of what the price did
@@ -177,7 +186,7 @@ def sentiment_contradicts(pct, text):
     return (pct > 0 and BEAR_WORDS.search(lead)) or (pct < 0 and BULL_WORDS.search(lead))
 ```
 
-**(B) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is absolute: de-escalation cannot be cited as the *cause* of a rally. The guard catches it both within a sentence (*"gold rose on the truce"*) and across sentences (*"…the two sides reached a truce. This lifted gold."*), and the sentence splitter is abbreviation-aware so a stray "U.S." can't hide the clause boundary:
+**(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is absolute: de-escalation cannot be cited as the *cause* of a rally. The guard catches it both within a sentence (*"gold rose on the truce"*) and across sentences (*"…the two sides reached a truce. This lifted gold."*), and the sentence splitter is abbreviation-aware so a stray "U.S." can't hide the clause boundary:
 
 ```python
 # drop any sentence that blames peace/de-escalation for a gold or silver rally

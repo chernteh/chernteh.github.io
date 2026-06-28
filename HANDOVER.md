@@ -78,25 +78,74 @@ README.md, LICENSE, tools/   Excluded from build (see _config.yml exclude)
 
 ## 4. The design system (read before changing visuals)
 
-### Color tokens — defined once in `:root` ([style.css](assets/css/style.css) top). Always use the variables.
+### Theme system — DUAL (dark + light)
+
+The site ships with a **full token-based dual-theme**. All colours are CSS custom properties. Dark is the
+default; light (`data-theme="light"` on `<html>`) is the Apple Cupertino Light palette.
+
+**Dark theme tokens (`:root`, GitHub Dark aesthetic):**
 ```
---bg:            #0d1117   page background (near-black)
---sidebar-bg:    #161b22   sidebar / card / table-header surface
---card-bg:       #161b22   project cards (same as sidebar)
---nav-active:    #1d3a5f   active nav link background (muted blue)
---text:          #e6edf3   primary text (off-white)
---text-muted:    #8b949e   secondary text (grey)
+--bg:            #0d1117   page background
+--sidebar-bg:    #161b22   sidebar / card surface
+--card-bg:       #161b22   project cards
+--nav-active:    #1d3a5f   active nav link background
+--text:          #e6edf3   primary text / headings / bold
+--body-text:     #d0d7de   normal paragraph/list text (slightly dimmer than --text so bold is visible)
+--text-muted:    #8b949e   secondary / muted text
 --accent:        #58a6ff   links, highlights, hover borders (GitHub blue)
+--accent-soft:   …         softer accent tint for hover states
+--accent-faint:  …         very faint accent for blockquote backgrounds
 --border:        #21262d   hairline borders / dividers
---sidebar-width: 280px     drives BOTH the sidebar width AND .main-content right margin
+--hover-bg:      …         subtle hover background on nav/cards
+--banner:        …         banner gradient start colour
+--banner-glow:   …         banner gradient end colour
+--code-bg:       #080c13   code block background
+--code-base:     #d4d4d4   code default text
+--sidebar-width: 280px     drives BOTH sidebar width AND .main-content left margin
 ```
-**Rule:** never hardcode these hex values inline — reference the token so the palette stays single-source.
-(Exceptions already in the file: the banner gradient and the Rouge syntax-token colors, which are
-intentionally literal.)
+
+**Syntax tokens (dark, VS Code Dark+):**
+`--sx-keyword #569cd6` · `--sx-type #4ec9b0` · `--sx-string #ce9178` · `--sx-comment #6a9955`
+`--sx-number #b5cea8` · `--sx-func #dcdcaa` · `--sx-builtin #569cd6` · `--sx-var #9cdcfe`
+`--sx-error #f44747`
+
+**Light theme overrides (`:root[data-theme="light"]`, Apple Cupertino):**
+```
+--bg:            #f5f5f7   off-white page background
+--sidebar-bg:    #ffffff   white sidebar
+--card-bg:       #ffffff   white cards
+--nav-active:    #e8e8ed   subtle grey active link
+--text:          #1d1d1f   near-black headings
+--body-text:     #424245   dark grey body copy
+--text-muted:    #86868b   Apple secondary grey
+--accent:        #0071e3   Apple blue
+--border:        #d2d2d7   light dividers
+--code-bg:       #ececf0   light code surface
+--code-base:     #1d1d1f
+```
+
+**Syntax tokens (light, Xcode Default Light):**
+`--sx-keyword #9b2393` · `--sx-string #c41a16` · `--sx-comment #707f8c` · `--sx-number #1c00cf`
+`--sx-func #3900a0` · `--sx-type #0d5ae5` · `--sx-builtin #aa0d91`
+
+**Rule:** never hardcode hex values inline — always reference the token. Both themes update automatically
+at zero extra effort when you do this.
+
+### Theme toggle
+
+A `<button class="theme-toggle" id="themeToggle">` sits inside `.banner` (top-right, absolute-positioned).
+It shows a moon icon (dark mode) or sun icon (light mode). JS at the bottom of `default.html` handles
+click — flips `data-theme` on `<html>` and writes `localStorage('theme', 'dark'|'light')`.
+
+**No-flash script** (inline in `<head>` of `default.html`): reads `localStorage` → OS
+`prefers-color-scheme` → defaults dark. Sets `data-theme` before first paint so there is no colour flash.
 
 ### Layout model
-- `.wrapper` is `display:flex`. `.main-content` is `flex:1` with `margin-right: var(--sidebar-width)`.
-- `.sidebar` is `position: fixed; right:0; top:0; bottom:0` — a full-height fixed right rail (260–300px range; currently 280).
+
+- `.wrapper` is `display:flex`. `.main-content` is `flex:1` with **`margin-left: var(--sidebar-width)`**.
+- `.sidebar` is `position: fixed; left:0; top:0; bottom:0` — a full-height fixed **LEFT** rail (280px).
+  ⚠️ The sidebar was moved from the right to the left during the 2026-06-28 session. Update any notes
+  that say "right rail" — they are stale.
 - `.banner` is a 280px gradient header strip at the top of the content column.
 - `.page-body` holds the page content: `max-width: 900px; margin: 0 auto; padding: 2.5rem 3rem`.
   On wide screens this leaves whitespace on both sides of the 900px block.
@@ -104,28 +153,46 @@ intentionally literal.)
   same content width and the fixed sidebar never shifts. Don't remove this — it fixes a real bug.
 
 ### Typography
+
 - System font stack (`-apple-system, Segoe UI, Roboto…`), base `line-height: 1.6` (1.75 for paragraphs).
+- Type scale: `h1 2.25rem · h2 1.6rem · h3 1.2rem · post-title 2.25rem`.
+- Normal paragraph/list copy uses `var(--body-text)` (slightly dimmer than `--text`) so bold (`var(--text)`)
+  is visually distinct. Don't collapse these two tokens back into one.
 - Headings, lists, blockquotes, tables, inline code, and code blocks are all styled under `.page-body …`.
-- Code: inline code and `pre` use a dark `#080c13` block; full Rouge token palette mirrors **VS Code Dark+**
-  (keywords blue `#569cd6`, strings orange `#ce9178`, comments green `#6a9955`, etc.).
+- Code: inline code and `pre` use `var(--code-bg)` / `var(--code-base)` + full Rouge syntax token palette
+  (all syntax colours are CSS vars now, so both themes get correct highlighting automatically).
+
+### Heading semantics (fixed)
+
+- Sidebar title "Chern Teh" → `<p class="site-title">` (not `<h1>`; visual style preserved via CSS).
+- Every content page now has its own real `<h1>`:
+  - `index.html` → `<h1>Welcome!</h1>`
+  - `projects.html` → `<h1>Projects</h1>`
+  - Blog posts inherit their `<h1>` from `post.html` (post title).
 
 ### Components
+
 - **Project cards** (`.project-card`): bordered rounded cards, lift + accent border on hover. Markup is a
   plain `<a>` wrapping `<h3>`, `.project-subtitle`, `<p>`, and `.project-tags` pills. See [projects.html](projects.html).
-- **Sidebar**: avatar circle (150px, `center/cover`), site title (1.5rem), tagline, vertical nav links,
-  social row (GitHub / LinkedIn / email Font Awesome icons).
+- **Theme toggle button** (`.theme-toggle`): circular, blurred backdrop, absolute top-right of `.banner`.
+  Moon icon = dark mode; sun icon = light mode.
+- **Sidebar**: avatar circle (150px, `center/cover`), site title `<p>` (1.5rem), tagline, vertical nav
+  links, social row (GitHub / LinkedIn / email Font Awesome icons).
 
 ---
 
-## 5. The sidebar (current values, recently tuned)
+## 5. The sidebar (current values)
 
 In [_layouts/default.html](_layouts/default.html) `<aside class="sidebar">`:
+- **Position:** fixed **LEFT** rail (`left: 0; top: 0; bottom: 0`). `border-right` separates it from content.
+  `.main-content` has `margin-left: var(--sidebar-width)` (not margin-right — was changed 2026-06-28).
 - Avatar circle → `assets/img/avatar.png`, **150px**, 3px border.
-- Title "Chern Teh" 1.5rem; tagline "Quant Finance · Actuarial / Data Engineering".
+- Title "Chern Teh" → `<p class="site-title">` 1.5rem (deliberately `<p>`, not `<h1>` — heading semantics).
+- Tagline "Quant Finance · Actuarial / Data Engineering".
 - Nav: **About Me → `/`**, **Projects → `/projects/`**. Active state via Liquid:
   `{% if page.url == '/' %}active{% endif %}` and `{% if page.url contains 'projects' %}active{% endif %}`.
 - Social links: GitHub `github.com/chernteh`, LinkedIn `linkedin.com/in/chern-teh-59068325a/`,
-  email `chernteh@gmail.com`. Icons 1.2rem.
+  email `chernteh@gmail.com`. All with `rel="noopener noreferrer"` and `aria-hidden="true"` on icons.
 - `--sidebar-width` currently **280px**.
 
 These were iteratively dialed in with the owner; they care about proportion and comfortable spacing.
@@ -223,6 +290,58 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 
 ## 10. Recent change history (most recent first, for context)
 
+### 2026-06-28 — Full design + SEO + a11y session
+
+**Theme system (dark/light toggle)**
+- Rewrote `assets/css/style.css` to a full CSS-variable token system: all interface colours, banner, code
+  background, and all Rouge syntax tokens are now custom properties.
+- Dark theme (`:root`): GitHub Dark aesthetic (unchanged in character from before).
+- Light theme (`:root[data-theme="light"]`): Apple Cupertino Light palette (off-white BG, Apple blue accent,
+  Xcode Default Light syntax colours).
+- Added no-flash inline script in `<head>` of `default.html` (reads `localStorage` → OS `prefers-color-scheme`
+  → default dark; sets `data-theme` before paint).
+- Added `.theme-toggle` button in `.banner` (moon icon = dark, sun = light; toggle JS at body bottom;
+  persists via `localStorage`).
+- Introduced `--body-text` token (dark: `#d0d7de`, light: `#424245`) so normal paragraph text is visibly
+  dimmer than `--text` (headings/bold), restoring bold contrast.
+
+**Sidebar moved left**
+- `.sidebar`: changed from `right: 0` to `left: 0`; added `border-right` (removed `border-left`).
+- `.main-content`: changed from `margin-right` to `margin-left: var(--sidebar-width)`.
+- DOM order: `<aside>` before `<main>` (already was; confirmed correct for left positioning).
+
+**SEO / meta**
+- Added Open Graph (`og:title/description/url/image/type`), Twitter Card (`summary_large_image`), and
+  `<link rel="canonical">` to `default.html`.
+- Added JSON-LD `Person` schema on homepage and `Article` schema in `post.html`.
+- Added `jekyll-sitemap` plugin (`_config.yml` + `Gemfile`) for auto-generated `/sitemap.xml`.
+- OG cover image referenced at `/assets/img/og-cover.png` — **not yet created** (pending).
+
+**Accessibility**
+- `aria-hidden="true"` on all decorative Font Awesome icons.
+- `rel="noopener noreferrer"` on all external links.
+- `aria-label` on social icon links and theme toggle button.
+- TOC focus ring: switched from `outline` to `box-shadow: inset 0 0 0 2px var(--accent)` (outline
+  overflowed the TOC panel; inset box-shadow is physically contained).
+- Removed skip-link entirely (Chern chose to remove after confirming it didn't serve his use case).
+
+**Heading semantics**
+- Sidebar title `<h1 class="site-title">` → `<p class="site-title">` (branding, not document heading).
+- `index.html`: added `<h1>Welcome!</h1>`.
+- `projects.html`: `<p class="section-title">` → `<h1>Projects</h1>`.
+
+**Typography**
+- Type scale: h1 2.25rem, h2 1.6rem, h3 1.2rem, post-title 2.25rem.
+
+**Content**
+- `projects.html` subtitle: "Things I've built." → "Small projects that I've been working on for fun
+  aside from my studies!" (friendlier tone, Chern's wording).
+- `index.html`: "National University of Singapore (NUS)" linked to `nus.edu.sg`; "Society of Actuaries
+  (SOA)" linked to `soa.org`.
+
+---
+
+**Earlier history (pre-2026-06-28)**
 - Reserve scrollbar gutter (`overflow-y: scroll`) so the sidebar doesn't shift between short/long pages.
 - Sidebar tuning: width 280px, avatar 150px, social icons 1.2rem, larger title/nav, extra avatar margin.
 - Added profile photo `assets/img/avatar.png` and pointed the avatar CSS at it.
@@ -236,13 +355,26 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 
 ---
 
-## 11. For the future designer agent — start here
+## 11. Pending items (deferred, not done)
+
+| Item | What's needed | Notes |
+|---|---|---|
+| **Favicon** | Go to favicon.io → Text → "CT", bg `#0d1117`, text `#58a6ff` → download ZIP → place files in `assets/img/` → add `<link rel="icon">` tags to `default.html` | Deliberately deferred by Chern |
+| **OG cover image** | Create 1200×630px `og-cover.png` → `assets/img/og-cover.png` | OG `<meta>` already wired, just missing the file |
+| **Google Search Console** | Get verification `<meta name="google-site-verification">` from GSC and add to `default.html` | Not started |
+| **Banner content** | Currently an empty gradient strip | Chern deferred redesign |
+| **Homepage body** | 3 paragraphs + 2-item list — thin | Content expansion deferred |
+
+---
+
+## 12. For the future designer agent — start here
 
 Your sandbox is almost entirely **[assets/css/style.css](assets/css/style.css)** plus the three layout
 files. The mental model:
 
-1. **Palette** lives in `:root`. Change the feel of the whole site from there.
-2. **Layout** is a fixed right sidebar + centered 900px content column, with a special wide grid on posts.
+1. **Palette** lives in `:root` (dark) and `:root[data-theme="light"]` (light). Edit both when changing
+   any colour — they are separate token sets. The syntax tokens (`--sx-*`) also need both versions.
+2. **Layout** is a fixed **LEFT** sidebar + centered 900px content column, with a special wide grid on posts.
 3. **The TOC is custom and fragile-ish** — re-read §6 before restyling it; keep the grid + DOM-order +
    IntersectionObserver contract intact.
 4. **You can't build locally** — make tasteful, low-risk CSS changes, push, and check the live site after
@@ -250,6 +382,8 @@ files. The mental model:
 5. **The owner iterates on proportion and comfort** (spacing, sizes, balance). Make one coherent change at
    a time, commit + push, and describe what you changed and why so they can react. Confirm direction before
    shrinking things they previously asked to enlarge (e.g. the TOC, the avatar).
+6. **Theme toggle is live** — don't remove or break the `themeToggle` button, the no-flash `<head>` script,
+   or the `[data-theme="light"]` token block. All three must stay in sync.
 
 When in doubt about a design decision that changes the site's character (palette, removing the sidebar,
 banner imagery), ask the owner rather than guessing.
