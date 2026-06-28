@@ -215,12 +215,13 @@ body {
 
   .post-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
+    grid-template-columns: 280px minmax(0, 1fr);
     gap: 3.5rem;
   }
 
   .toc-panel {
     display: block;
+    order: -1;
     position: sticky;
     top: 2rem;
     align-self: start;
