@@ -21,7 +21,7 @@ So I built a bot. Every morning it pulls market headlines and closing prices, ru
 
 **But the catch is:** when a model is unattended, it will occasionally tell you something **very wrong with absolute confidence**, and everyone has encountered it one way or another and would typically call it by its industry term, **hallucination**.
 
-## 1. The bot literally told me that peace was bad for gold...
+## 1. The bot literally told me that peace was bad for gold
 One morning my bot opened the market brief with:
 
 > *"Gold rallied as the ceasefire eased tensions across the region."*
@@ -64,9 +64,9 @@ Every morning, it repeats the workflow:
 - The intelligence layer is two free models on Groq's free tier: *Llama 3.3 70B & Llama 4 Scout*. 
 - For news, there are three sources: public RSS feeds (MarketWatch, CNBC, Investing.com), per-ticker company news from Finnhub's API (`finnhub.io`)
 
-## 3.  Thesis: a rule in a prompt is a request, a rule in code is a guarantee
+## 3.  A rule in a prompt is a request, a rule in code is a guarantee
 
-Here is the single most useful thing I learned:
+Here's the thing I learned:
 
 > **You cannot completely fix a hallucination by adding a sentence to the prompt. Because at the end of the day, a rule in the prompt is just a request. But a rule in code is a guarantee.**
 
@@ -76,7 +76,7 @@ When the model wrote that peace lifted gold prices, my first instinct was to **e
 
 It was a clear, explicit rule. And it worked. Well... most of the time. But **"most of the time"** isn't good enough when failure only needs to happen once, especially for an unattended model. On the one morning the headlines were unusually persuasive, the model quietly violated the instruction anyway.
 
-The reason is because the weights are frozen at inference time, a system prompt cannot permanently teach the model a rule. The instruction exists only as tokens in the current context window, competing with everything else the model reads. It has no special authority over the fixed weights, which is why a persuasive enough input can override it.
+The reason is because the weights are frozen at inference time, a system prompt cannot permanently teach the model a rule. The **instruction exists only as tokens** in the current context window, competing with everything else the model reads. It has no special authority over the fixed weights, which is why a persuasive enough input can override it.
 
 And you might reasonably think: *Why not run a second model to QA the first?* That is a legitimate and sound technique, but it doesn't resolve the core issue. A QA model would just be another probabilistic component that can be wrong sometimes... and now you have two models that can hallucinate instead of one. For a bot that runs unattended with no human backstop, I didn't want correctness to be **probable**, I wanted the things that must never happen to be **impossible by construction**. That is a job for code, not for a better-behaved model.
 

@@ -1,15 +1,17 @@
 ---
 layout: default
 ---
-<nav class="toc-panel" id="toc-panel">
-  <p class="toc-heading">Contents</p>
-  <ul id="toc-list"></ul>
-</nav>
+<div class="post-grid">
+  <article>
+    <p class="post-meta">{{ page.date | date: "%B %d, %Y" }}</p>
+    {{ content }}
+  </article>
 
-<article>
-  <p class="post-meta">{{ page.date | date: "%B %d, %Y" }}</p>
-  {{ content }}
-</article>
+  <nav class="toc-panel" id="toc-panel">
+    <p class="toc-heading">Contents</p>
+    <ul id="toc-list"></ul>
+  </nav>
+</div>
 
 <script>
 (function () {

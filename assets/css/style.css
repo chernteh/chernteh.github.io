@@ -204,18 +204,29 @@ body {
 .project-tags span { background: rgba(88,166,255,0.1); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 
 /* ── Table of Contents ── */
-.toc-panel {
-  display: none;
-  position: fixed;
-  top: 5rem;
-  left: calc((100vw - var(--sidebar-width)) / 2 + 450px + 2.5rem);
-  width: 200px;
-  max-height: calc(100vh - 7rem);
-  overflow-y: auto;
-}
+/* Default (narrow): single column, no TOC. */
+.post-grid { display: block; }
+.toc-panel { display: none; }
 
-@media (min-width: 1650px) {
-  .toc-panel { display: block; }
+/* Wide screens: lay out article + TOC as one centered unit so the
+   TOC lives in real grid space rather than fighting for whitespace. */
+@media (min-width: 1280px) {
+  body.layout-post .page-body { max-width: 1200px; }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 3rem;
+  }
+
+  .toc-panel {
+    display: block;
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
 }
 
 .toc-heading {
