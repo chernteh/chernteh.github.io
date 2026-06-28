@@ -401,6 +401,10 @@ body {
 .exp-company { color: var(--accent); font-size: 0.92rem; font-weight: 500; margin-top: 0.15rem; text-decoration: none; display: block; }
 .exp-company:hover { text-decoration: underline; }
 .exp-blurb { color: var(--body-text); font-size: 0.9rem; line-height: 1.7; margin-top: 0.55rem; }
+/* Bullet variant for role highlights inside a card. */
+ul.exp-blurb { list-style: none; padding: 0; margin-top: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; }
+ul.exp-blurb li { position: relative; padding-left: 1.1rem; font-size: 0.88rem; line-height: 1.55; }
+ul.exp-blurb li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 
 /* Leave breathing room above a heading when jumped to via a TOC anchor. */
 /* Always reserve scrollbar space so the fixed sidebar stays put across pages. */
