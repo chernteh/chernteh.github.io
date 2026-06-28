@@ -277,6 +277,8 @@ article h2, article h3 { scroll-margin-top: 3.5rem; }
 #toc-list a:hover { color: var(--text); }
 #toc-list a.toc-active { color: var(--accent); border-left-color: var(--accent); }
 .toc-h3 a { padding-left: 1.4rem; font-size: 0.85rem; }
+/* Tighter focus ring for TOC links — global 3px offset overflows the panel. */
+#toc-list a:focus-visible { outline-offset: 0; border-radius: 3px; }
 
 /* ── Post ── */
 .post-title { font-size: 1.8rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
