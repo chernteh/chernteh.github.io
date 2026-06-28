@@ -220,9 +220,9 @@ I'll continue working on these next time!
 
 ## 9. If you want to build one for yourself too
 
-In any LLM pipeline there will be at least three distinct layers where inaccuracy can originate: the data source (stale, mismatched, or miscalculated feeds), the context construction (what you pipe into the model), and the model output itself. So remember to not jump straight to blaming the model. I would recommend to audit each layer independently.
+In any LLM pipeline there will be at least three distinct layers where inaccuracy can originate: the data source (stale, mismatched, or miscalculated feeds), the context construction (what you pipe into the model), and the model output itself. So remember to not jump straight into blaming the model. I would recommend to audit each layer independently.
 
-And for any LLM, its attention is finite. Attention is distributed across every token in the context window, so the more responsibilities a model holds simultaneously, the more its capacity is split across competing sub-tasks, degrading performance on each. The general principle is: one responsibility per model call. Your model will consistently perform better for it.
+And for any LLM, its attention is finite. Attention is distributed across every token in the context window, so the more responsibilities a model holds simultaneously, the more its capacity is split across competing sub-tasks, degrading performance on each. The general principle is: one responsibility per model call. And your model will consistently perform better for it.
 
 The biggest realisation is that I had been approaching the problem backwards. Every time the model lied, I'd try to teach it with a better prompt or a cleaner instruction. But you can't teach a frozen model. You can only limit what it's allowed to touch.
 
