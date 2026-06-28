@@ -55,9 +55,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
 </head>
 <body class="layout-{{ page.layout }}">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="wrapper">
 
-    <main class="main-content">
+    <main class="main-content" id="main-content" tabindex="-1">
       <div class="banner"></div>
       <div class="page-body">
         {{ content }}
