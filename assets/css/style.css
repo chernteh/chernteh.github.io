@@ -3,7 +3,7 @@
 :root {
   --bg:             #0d1117;
   --sidebar-bg:     #161b22;
-  --sidebar-width:  260px;
+  --sidebar-width:  300px;
   --nav-active:     #1d3a5f;
   --text:           #e6edf3;
   --text-muted:     #8b949e;
@@ -83,8 +83,8 @@ body {
 .sidebar-top { text-align: center; }
 
 .avatar-circle {
-  width: 110px;
-  height: 110px;
+  width: 143px;
+  height: 143px;
   border-radius: 50%;
   background: var(--border) url('/assets/img/avatar.png') center/cover no-repeat;
   margin: 0 auto 1.25rem;
@@ -92,14 +92,14 @@ body {
 }
 
 .site-title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 0.5rem;
 }
 
 .site-tagline {
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
   line-height: 1.6;
 }
@@ -114,10 +114,10 @@ body {
 
 .nav-link {
   display: block;
-  padding: 0.75rem 1rem;
+  padding: 0.9rem 1rem;
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 500;
   text-align: center;
   border-radius: 6px;
@@ -135,7 +135,7 @@ body {
 }
 .sidebar-social a {
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   text-decoration: none;
   transition: color 0.15s;
 }
