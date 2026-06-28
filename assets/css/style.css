@@ -211,12 +211,12 @@ body {
 /* Wide screens: lay out article + TOC as one centered unit so the
    TOC lives in real grid space rather than fighting for whitespace. */
 @media (min-width: 1280px) {
-  body.layout-post .page-body { max-width: 1200px; }
+  body.layout-post .page-body { max-width: 1320px; }
 
   .post-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 220px;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 3.5rem;
   }
 
   .toc-panel {
@@ -230,7 +230,7 @@ body {
 }
 
 .toc-heading {
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -250,8 +250,8 @@ body {
 
 #toc-list a {
   display: block;
-  padding: 0.3rem 0.5rem 0.3rem 0.75rem;
-  font-size: 0.78rem;
+  padding: 0.35rem 0.5rem 0.35rem 0.85rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
   text-decoration: none;
   line-height: 1.4;
@@ -262,7 +262,7 @@ body {
 
 #toc-list a:hover { color: var(--text); }
 #toc-list a.toc-active { color: var(--accent); border-left-color: var(--accent); }
-.toc-h3 a { padding-left: 1.25rem; font-size: 0.73rem; }
+.toc-h3 a { padding-left: 1.4rem; font-size: 0.85rem; }
 
 /* ── Post ── */
 .post-title { font-size: 1.8rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
