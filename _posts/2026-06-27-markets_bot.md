@@ -21,37 +21,7 @@ So I built a bot. Every morning it pulls market headlines and closing prices, ru
 
 **But the catch is:** when a model is unattended, it will occasionally tell you something **very wrong with absolute confidence**, and everyone has encountered it one way or another and would typically call it by its industry term, **hallucination**.
 
-## 1. The bot literally told me that peace was bad for gold
-One morning my bot opened the market brief with:
-
-> *"Gold rallied as the ceasefire eased tensions across the region."*
-
-It is hard to overstate how confidently wrong that is. Gold is the asset people flee to when the world looks scary. A ceasefire is **the opposite** of scary. If anything, peace should have dragged gold prices down. 
-
-The model had taken two true facts:  ***'there was a ceasefire'*** and ***'gold went up'*** and welded them together with a causal claim that goes against one of the oldest reflexes in markets.
-
-In actuality, the model has no understanding that gold rises on fear and falls when fear subsides. How an LLM works is that it **predicts what the next token is**. Given everything before a word, it picks 
-what word is most statistically likely to come next, based purely on patterns in its training 
-data.
-
-Consider the example:
-
- > There are 3 apples on a table. You take 2. How many apples do you have?
-
- The obvious answer would be 2. But a smaller or less complex model would answer 1.
-
-The model did not misread any numbers. It saw '3', 'take', '2' together, and the pattern those tokens form in training data strongly associated them with subtraction: 3 minus 2 equals 1. But the question asks what *you* have, not what remains on the table. It did not pick up on the part that changes the meaning.
-
-The gold sentence was the same failure, just at a higher level. The model read "ceasefire", 
-"gold", "rallied", and predicted the most likely causal sentence connecting them without processing whether that causation ran in the right/logical direction.
-
-There is no "Is this true?" signal in the training loss. The model was never optimised to verify causation, only to produce statistically plausible text. Even instruction-tuned models retain this gap: they hallucinate less often, but never zero.
-
-Of course, the obvious solution to "this model hallucinates sometimes" is to just **use a bigger, better model** (e.g. Claude, ChatGPT).
-
-But because I wanted the whole process to be completely free (*as Claude's/ChatGPT's API costs money*), I decided to design an architecture around **making the model unable to misbehave** rather than buying my way to a model that behaves more often.
-
-## 2. How The Bot Works
+## 1. How The Bot Works
 
 Every morning, it repeats the workflow:
 
@@ -64,11 +34,39 @@ Every morning, it repeats the workflow:
 - The intelligence layer is two free models on Groq's free tier: *Llama 3.3 70B & Llama 4 Scout*. 
 - For news, there are three sources: public RSS feeds (MarketWatch, CNBC, Investing.com), per-ticker company news from Finnhub's API (`finnhub.io`)
 
-## 3.  A rule in a prompt is a request, a rule in code is a guarantee
+## 2. The bot literally told me that peace was bad for gold
+One morning my bot opened the market brief with:
+
+> *"Gold rallied as the ceasefire eased tensions across the region."*
+
+It is hard to overstate how confidently wrong that is. Gold is the asset people flee to when the world looks scary. A ceasefire is **the opposite** of scary. If anything, peace should have dragged gold prices down. 
+
+The model had taken two true facts:  ***'there was a ceasefire'*** and ***'gold went up'*** and welded them together with a causal claim that goes against one of the oldest reflexes in markets.
+
+In actuality, the model has no understanding that gold rises on fear and falls when fear subsides. How an LLM works is that it **predicts what the next token is**. Given everything before a word, it picks what word is most statistically likely to come next, based purely on patterns in its training 
+data.
+
+Consider the example:
+
+ > There are 3 apples on a table. You take 2. How many apples do you have?
+
+ The obvious answer would be 2. But a smaller or less complex model would answer 1.
+
+The model did not misread any numbers. It saw '3', 'take', '2' together, and the pattern those tokens form in training data strongly associated them with subtraction: 3 minus 2 equals **1**. But the question asks what *you* have, not what remains on the table. It did not pick up on the part that changes the meaning.
+
+The gold sentence was the same failure, just at a higher level. The model read "ceasefire", "gold", "rallied", and predicted the most likely causal sentence connecting them without processing whether that causation ran in the right/logical direction.
+
+There is no "Is this true?" signal in the training loss. The model was never optimised to verify causation, only to produce statistically plausible text. Even instruction-tuned models retain this gap: they hallucinate less often, but never zero.
+
+Of course, the obvious solution to "this model hallucinates sometimes" is to **just use a bigger, better model** (e.g. Claude, ChatGPT).
+
+But because I wanted the whole process to be **completely free** (*as Claude's/ChatGPT's API costs money*), I decided to design an architecture around **making the model unable to misbehave** rather than buying my way to a model that behaves more often.
+
+## 3. A rule in a prompt is a request, a rule in code is a guarantee
 
 Here's the thing I learned:
 
-> **You cannot completely fix a hallucination by adding a sentence to the prompt. Because at the end of the day, a rule in the prompt is just a request. But a rule in code is a guarantee.**
+> **You cannot completely fix a hallucination by adding a sentence to the prompt. Because at the end of the day, a rule in the prompt is just a request. But a rule in code is guaranteed.**
 
 When the model wrote that peace lifted gold prices, my first instinct was to **edit the prompt**:
 
@@ -88,7 +86,7 @@ So I stopped negotiating with the model and started constraining it instead. And
 
  **Numbers are Python's job.**
 
-The model never sees a number it is allowed to invent. It does not compute the S&P's daily return, it does not decide whether gold is "up sharply" or "roughly flat," and it does not get to quote a percentage from memory. Python fetches every figure, verifies it, formats it, and pastes it in. The model then writes the story *around* the numbers, but never the numbers themselves.
+The model never sees a number it is allowed to invent. It does not compute the S&P's daily return, it does not decide whether gold is "up sharply" or "roughly flat," and it does not get to quote a percentage from memory. Python fetches every figure, verifies it, formats it, and pastes it in. The model then writes the story *around the numbers*, but never the numbers themselves.
 
 In a nutshell, this is a **division of labour**, and it runs along **two seams**.
 
@@ -119,14 +117,16 @@ The model is sandwiched between two layers of code:
 
 ## 5. The two-model layer: a reader and a writer
 
-The second seam runs inside the model layer, and it's where I made the biggest structural mistake before getting it right.
+The second seam runs inside the model layer, and it's where I made the biggest mistake before getting it right.
 
 My first instinct was to hand the whole thing to a single model:
 > 'Here is the full feed of the morning's headlines (dozens of them, most irrelevant), now read all of it *and* write me the brief.' 
 
-It half-worked. A single model asked to both *sift* and *write* does neither well. It buries the three headlines that matter inside forty that don't, and its attention smears across the noise. It pads the brief with filler it should have discarded, or fixates on a loud-but-irrelevant headline, because nothing ever forced it to decide what mattered *first*.
+It half-worked. 
 
-So I split the model layer in two, by task:
+A single model asked to both *sift* and *write* does neither well. It buries the three headlines that matter inside forty that don't, and its attention smears across the noise. It pads the brief with filler it should have discarded, or fixates on a loud but irrelevant headline, because nothing ever forced it to decide what mattered first.
+
+So I split the model layer in two by task:
 
 ```
   ┌──── STAGE 1 · the reader ─────┐       ┌──── STAGE 2 · the writer ────┐
@@ -213,15 +213,19 @@ Running underneath both sanity checks is a single governing discipline: **when i
 
 - **Guards can only catch known failure modes, not unknown ones.** Every guard here exists because the model already burned me in that specific way once. The gold-peace guard does nothing about the *next* category of confident nonsense I haven't seen yet. This is a catalogue of caught lies, not a proof of honesty.
 - **Rules trade false negatives for false positives.** A guard that deletes "suspicious" sentences will occasionally delete a *true* one: a correctly-reasoned causal claim that happens to trip a pattern. I've chosen that trade deliberately (a missing sentence beats a false one), but it is a real cost, and on a quiet news day it can make the brief terser than it needs to be.
-- **It's regex and rules, not understanding.** These guards match patterns, not meaning. A sufficiently novel phrasing of the gold-peace lie could slip past the specific patterns I wrote. The honest framing is that I've raised the cost of a particular class of error, not eliminated the class.
-- **"Numbers are Python's job" has a boundary.** Python owns the index and ETF figures end-to-end. But the model is still allowed to surface *macro* numbers it reads in a cited headline (a yield, an oil price) and those I have not fully pinned. That will be the next boundary to harden.
+- **It's only regex and rules, not understanding.** These guards match patterns, not meaning. A sufficiently novel phrasing of the gold-peace lie could slip past the specific patterns I wrote. The honest framing is that I've raised the cost of a particular class of error, not eliminated the class.
+- **Python owning the numbers has a boundary.** Python owns the index and ETF figures end-to-end. But the model is still allowed to surface *macro* numbers it reads in a cited headline (a yield, an oil price) and those I have not fully pinned. That will be the next boundary to harden.
 
-I'll continue working on these next month.
+I'll continue working on these next time!
 
 ## 9. If you want to build one for yourself too
 
-I started out thinking I was only building a summariser. Turns out, I was actually building a *referee*, a layer that lets a creative, yet unreliable model do the part it's good at, while quietly refusing to let it speak on the things it gets wrong.
+In any LLM pipeline there will be at least three distinct layers where inaccuracy can originate: the data source (stale, mismatched, or miscalculated feeds), the context construction (what you pipe into the model), and the model output itself. So remember to not jump straight to blaming the model. I would recommend to audit each layer independently.
 
-If there's one transferable lesson, it would be **instead of trying to make the model behave, you can consider making the system unable to misbehave.**
+And for any LLM, its attention is finite. Attention is distributed across every token in the context window, so the more responsibilities a model holds simultaneously, the more its capacity is split across competing sub-tasks, degrading performance on each. The general principle is: one responsibility per model call. Your model will consistently perform better for it.
+
+The biggest realisation is that I had been approaching the problem backwards. Every time the model lied, I'd try to teach it with a better prompt or a cleaner instruction. But you can't teach a frozen model. You can only limit what it's allowed to touch.
+
+So if there's one transferable lesson, it would be **instead of trying to make the model behave, you can consider making the system unable to misbehave.**
 
 At least now it no longer gets to tell me that peace is bad for gold.
