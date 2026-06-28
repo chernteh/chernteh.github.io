@@ -1,7 +1,46 @@
 ---
 layout: default
 ---
+<nav class="toc-panel" id="toc-panel">
+  <p class="toc-heading">Contents</p>
+  <ul id="toc-list"></ul>
+</nav>
+
 <article>
   <p class="post-meta">{{ page.date | date: "%B %d, %Y" }}</p>
   {{ content }}
 </article>
+
+<script>
+(function () {
+  var headings = document.querySelectorAll('article h2, article h3');
+  var list = document.getElementById('toc-list');
+  if (!list || headings.length === 0) return;
+
+  headings.forEach(function (h) {
+    if (!h.id) {
+      h.id = h.textContent.trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+    var li = document.createElement('li');
+    li.className = 'toc-' + h.tagName.toLowerCase();
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+
+  // Highlight active section on scroll
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var link = list.querySelector('a[href="#' + entry.target.id + '"]');
+      if (link) link.classList.toggle('toc-active', entry.isIntersecting);
+    });
+  }, { rootMargin: '0px 0px -70% 0px' });
+
+  headings.forEach(function (h) { observer.observe(h); });
+})();
+</script>
