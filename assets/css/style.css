@@ -398,7 +398,8 @@ body {
 }
 .exp-role { font-size: 1.08rem; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
 .exp-dates { color: var(--text-muted); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-.exp-company { color: var(--accent); font-size: 0.92rem; font-weight: 500; margin-top: 0.15rem; }
+.exp-company { color: var(--accent); font-size: 0.92rem; font-weight: 500; margin-top: 0.15rem; text-decoration: none; display: block; }
+.exp-company:hover { text-decoration: underline; }
 .exp-blurb { color: var(--body-text); font-size: 0.9rem; line-height: 1.7; margin-top: 0.55rem; }
 
 /* Leave breathing room above a heading when jumped to via a TOC anchor. */
