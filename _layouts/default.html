@@ -57,18 +57,11 @@
 <body class="layout-{{ page.layout }}">
   <div class="wrapper">
 
-    <main class="main-content">
-      <div class="banner"></div>
-      <div class="page-body">
-        {{ content }}
-      </div>
-    </main>
-
     <aside class="sidebar">
       <div class="sidebar-inner">
         <div class="sidebar-top">
           <div class="avatar-circle"></div>
-          <h1 class="site-title">Chern Teh</h1>
+          <p class="site-title">Chern Teh</p>
           <p class="site-tagline">Quant Finance · Actuarial<br>Data Engineering</p>
         </div>
 
@@ -84,6 +77,13 @@
         </div>
       </div>
     </aside>
+
+    <main class="main-content">
+      <div class="banner"></div>
+      <div class="page-body">
+        {{ content }}
+      </div>
+    </main>
 
   </div>
 </body>
