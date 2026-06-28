@@ -1,6 +1,27 @@
 ---
 layout: default
 ---
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ page.title | escape }}",
+  "description": "{{ page.excerpt | default: page.description | default: site.description | escape }}",
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "author": {
+    "@type": "Person",
+    "name": "Chern Teh",
+    "url": "{{ site.url }}"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Chern Teh",
+    "url": "{{ site.url }}"
+  },
+  "url": "{{ page.url | absolute_url }}"
+}
+</script>
+
 <div class="post-grid">
   <article>
     <p class="post-meta">{{ page.date | date: "%B %d, %Y" }}</p>

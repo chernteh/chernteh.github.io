@@ -1,6 +1,9 @@
 title: Chern Teh
 description: Quant Finance · Actuarial · Data Engineering
 url: "https://chernteh.github.io"
+
+plugins:
+  - jekyll-sitemap
 timezone: Asia/Kuala_Lumpur
 lang: en
 

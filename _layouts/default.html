@@ -5,6 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="{{ page.description | default: site.description }}">
   <title>{% if page.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
+
+  <!-- Canonical -->
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:title" content="{% if page.title %}{{ page.title }} — {% endif %}{{ site.title }}">
+  <meta property="og:description" content="{{ page.description | default: site.description }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ '/assets/img/og-cover.png' | absolute_url }}">
+  {% if page.layout == 'post' %}
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+  <meta property="article:author" content="Chern Teh">
+  {% else %}
+  <meta property="og:type" content="website">
+  {% endif %}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% if page.title %}{{ page.title }} — {% endif %}{{ site.title }}">
+  <meta name="twitter:description" content="{{ page.description | default: site.description }}">
+  <meta name="twitter:image" content="{{ '/assets/img/og-cover.png' | absolute_url }}">
+
+  <!-- JSON-LD: Person (homepage only) -->
+  {% if page.url == '/' %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Chern Teh",
+    "url": "{{ site.url }}",
+    "sameAs": [
+      "https://github.com/chernteh",
+      "https://www.linkedin.com/in/chern-teh-59068325a/"
+    ],
+    "jobTitle": "Quantitative Finance & Actuarial Student",
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "National University of Singapore"
+    },
+    "email": "chernteh@gmail.com"
+  }
+  </script>
+  {% endif %}
+
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
 </head>
@@ -32,9 +78,9 @@
         </nav>
 
         <div class="sidebar-social">
-          <a href="https://github.com/chernteh" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="https://www.linkedin.com/in/chern-teh-59068325a/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-          <a href="mailto:chernteh@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          <a href="https://github.com/chernteh" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+          <a href="https://www.linkedin.com/in/chern-teh-59068325a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+          <a href="mailto:chernteh@gmail.com" aria-label="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
         </div>
       </div>
     </aside>
