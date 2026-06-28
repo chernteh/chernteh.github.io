@@ -86,7 +86,7 @@ body {
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  background: var(--border) url('/assets/img/avatar.jpg') center/cover no-repeat;
+  background: var(--border) url('/assets/img/avatar.png') center/cover no-repeat;
   margin: 0 auto 1.25rem;
   border: 3px solid var(--border);
 }
