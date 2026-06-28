@@ -290,6 +290,15 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 
 ## 10. Recent change history (most recent first, for context)
 
+### 2026-06-29 — Experience cards + content (final state)
+
+**Content finalised (commits 931bb79 → bd476a8):**
+- Pluang description: first-person prose summary (Chern's own wording) covering Looker→Tableau
+  migration, dbt+BigQuery pipelines, and production agentic AI system via MCP.
+- ASE description: "Will update soon!" placeholder — to be replaced when the role matures.
+- Date ranges: ASE "June 2026 – Present"; Pluang "Dec 2025 – May 2026".
+- Company name (`<a class="exp-company">`) styled as a link (hover underline) pointing to company site.
+
 ### 2026-06-29 — Experience cards on About Me
 
 - Replaced the plain Experience `<ul>` in [index.html](index.html) with **Apple-style "Wide Media"
