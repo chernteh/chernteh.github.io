@@ -28,26 +28,6 @@ body {
   border-radius: 4px;
 }
 
-/* Skip link: hidden until focused, then slides in at top-left. */
-.skip-link {
-  position: absolute;
-  left: 0.5rem;
-  top: -3rem;
-  z-index: 100;
-  background: var(--accent);
-  color: var(--bg);
-  padding: 0.6rem 1rem;
-  border-radius: 0 0 6px 6px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: top 0.15s;
-}
-.skip-link:focus { top: 0; }
-
-/* The main container is only a skip-link landing target, not interactive —
-   don't draw a full-width ring around it when focus lands there. */
-.main-content:focus { outline: none; }
-
 /* ── Layout ── */
 .wrapper {
   display: flex;
