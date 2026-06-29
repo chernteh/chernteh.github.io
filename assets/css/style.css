@@ -70,7 +70,7 @@
   --banner-glow:    radial-gradient(ellipse at 70% 50%, rgba(0,113,227,0.10) 0%, transparent 65%);
 
   /* code + syntax (Xcode Default Light) */
-  --code-bg:        #eaf2fd;
+  --code-bg:        #f0f6fd;
   --inline-code-bg: #ececf0;
   --code-base:      #1d1d1f;
   --sx-keyword:     #9b2393;
