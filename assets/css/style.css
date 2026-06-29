@@ -12,7 +12,7 @@
 
   /* interface */
   --bg:             #0d1117;
-  --sidebar-bg:     #161b22;
+  --sidebar-bg:     #0d1117;
   --card-bg:        #161b22;
   --nav-active:     #1d3a5f;
   --text:           #e6edf3;
@@ -30,7 +30,7 @@
   --banner-glow:    radial-gradient(ellipse at 70% 50%, rgba(88,166,255,0.12) 0%, transparent 65%);
 
   /* code + syntax (VS Code Dark+) */
-  --code-bg:        #080c13;
+  --code-bg:        #161b22;
   --code-base:      #d4d4d4;
   --sx-keyword:     #569cd6;
   --sx-type:        #4ec9b0;
@@ -286,7 +286,7 @@ body {
 .page-body pre code { background: none; padding: 0; color: var(--code-base); font-size: 0.85rem; line-height: 1.6; }
 
 .page-body table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.9rem; }
-.page-body th { background: var(--sidebar-bg); color: var(--text); font-weight: 600; padding: 0.6rem 1rem; border: 1px solid var(--border); text-align: left; }
+.page-body th { background: var(--card-bg); color: var(--text); font-weight: 600; padding: 0.6rem 1rem; border: 1px solid var(--border); text-align: left; }
 .page-body td { padding: 0.5rem 1rem; border: 1px solid var(--border); color: var(--text-muted); }
 .page-body td:first-child { color: var(--text); font-weight: 500; }
 
