@@ -31,6 +31,7 @@
 
   /* code + syntax (VS Code Dark+) */
   --code-bg:        #161b22;
+  --inline-code-bg: #161b22;
   --code-base:      #d4d4d4;
   --sx-keyword:     #569cd6;
   --sx-type:        #4ec9b0;
@@ -58,13 +59,19 @@
   --accent-soft:    rgba(0,113,227,0.10);
   --accent-faint:   rgba(0,113,227,0.06);
   --exp-shadow:     0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08);
+  --exp-shadow-hover: 0 3px 8px rgba(0,0,0,0.05), 0 14px 34px rgba(0,0,0,0.09);
+  --hover-ring:     rgba(0,113,227,0.70);
+  --selection-bg:   rgba(0,113,227,0.20);
+  --zebra-bg:       #eef1f6;
+  --inline-code-bg: #ececf0;
 
   /* banner — soft light wash */
   --banner:         linear-gradient(135deg, #eef1f6 0%, #e3ebf5 40%, #eaf0f7 70%, #f0f0f3 100%);
   --banner-glow:    radial-gradient(ellipse at 70% 50%, rgba(0,113,227,0.10) 0%, transparent 65%);
 
   /* code + syntax (Xcode Default Light) */
-  --code-bg:        #ececf0;
+  --code-bg:        #f8f9fb;
+  --inline-code-bg: #ececf0;
   --code-base:      #1d1d1f;
   --sx-keyword:     #9b2393;
   --sx-type:        #0b4f79;
@@ -87,6 +94,8 @@ body {
 }
 
 /* ── Accessibility ── */
+::selection { background: var(--selection-bg, rgba(88,166,255,0.25)); color: inherit; }
+
 /* Visible focus ring for keyboard users only (mouse clicks stay clean). */
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -246,7 +255,7 @@ body {
 .sidebar-social a:hover { color: var(--accent); }
 
 /* ── Typography ── */
-.page-body h1 { font-size: 2.25rem; color: var(--text); margin-bottom: 0.5rem; }
+.page-body h1 { font-size: 2.25rem; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
 .page-body h2 { font-size: 1.6rem; color: var(--text); margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
 .page-body h3 { font-size: 1.2rem; color: var(--text); margin: 1.25rem 0 0.5rem; }
 .page-body p { color: var(--body-text); margin-bottom: 0.9rem; line-height: 1.75; }
@@ -267,7 +276,7 @@ body {
 
 /* inline code */
 .page-body code {
-  background: var(--code-bg);
+  background: var(--inline-code-bg);
   color: var(--code-base);
   padding: 0.15em 0.4em;
   border-radius: 4px;
@@ -289,6 +298,7 @@ body {
 .page-body th { background: var(--card-bg); color: var(--text); font-weight: 600; padding: 0.6rem 1rem; border: 1px solid var(--border); text-align: left; }
 .page-body td { padding: 0.5rem 1rem; border: 1px solid var(--border); color: var(--text-muted); }
 .page-body td:first-child { color: var(--text); font-weight: 500; }
+.page-body tbody tr:nth-child(even) td { background: var(--zebra-bg, transparent); }
 
 /* ── Project cards ── */
 .project-card {
@@ -300,9 +310,13 @@ body {
   text-decoration: none !important;
   color: inherit;
   background: var(--card-bg);
-  transition: border-color 0.2s, transform 0.15s, background-color 0.25s ease;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s, background-color 0.25s ease;
 }
 .project-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+/* Light: shadow-only card (no border); richer hover with soft blue ring */
+:root[data-theme="light"] .project-card { border-color: transparent; box-shadow: var(--exp-shadow); }
+:root[data-theme="light"] .project-card:hover { border-color: var(--hover-ring); transform: translateY(-2px); box-shadow: var(--exp-shadow-hover); }
 .project-card h3 { font-size: 1.05rem; color: var(--text); margin: 0 0 0.25rem; }
 .project-subtitle { color: var(--text-muted); font-size: 0.85rem; font-style: italic; margin: 0 0 0.75rem !important; }
 .project-card p { color: var(--text-muted); margin: 0 0 0.75rem; font-size: 0.9rem; line-height: 1.65; }
@@ -481,7 +495,7 @@ article h2, article h3 { scroll-margin-top: 3.5rem; }
 }
 
 /* ── Post ── */
-.post-title { font-size: 2.25rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
+.post-title { font-size: 2.25rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; letter-spacing: -0.02em; }
 .post-meta { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
 
 /* ── Syntax highlighting (themed: VS Code Dark+ / Xcode Light) ── */
