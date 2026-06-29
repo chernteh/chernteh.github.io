@@ -19,7 +19,7 @@ I usually don't have the time or the attention span to keep up with how the mark
 
 So I built a bot. Every morning it pulls market headlines and closing prices, runs them through a free LLM, and sends me a market brief over Telegram. No human reviews it. No premium API costs. Just an automated daily summary for me to keep up with the news.
 
-**But the catch is:** when a model is unattended, it will occasionally tell you something **very wrong with absolute confidence**, and everyone has encountered it one way or another and would typically call it by its industry term, **hallucination**.
+**But the catch is:** when a model is unattended, it will occasionally tell you something **very wrong with absolute confidence**, I believe that everyone has encountered it one way or another and would typically call it by its industry term, **hallucination**.
 
 ## 1. How The Bot Works
 
@@ -52,13 +52,13 @@ Consider the example:
 
  The obvious answer would be 2. But a smaller or less complex model would answer 1.
 
-The model did not misread any numbers. It saw '3', 'take', '2' together, and the pattern those tokens form in training data strongly associated them with subtraction: 3 minus 2 equals **1**. But the question asks what *you* have, not what remains on the table. It did not pick up on the part that changes the meaning.
+The model did not misread any numbers. It saw '3', 'take', '2' together, and the pattern those tokens form in training data strongly associated them with *subtraction*: 3 minus 2 **equals 1**. But the question asks what *you* have, not what remains on the table. It did not pick up on the part that changes the meaning.
 
 The gold sentence was the same failure, just at a higher level. The model read "ceasefire", "gold", "rallied", and predicted the most likely causal sentence connecting them without processing whether that causation ran in the right/logical direction.
 
-There is no "Is this true?" signal in the training loss. The model was never optimised to verify causation, only to produce statistically plausible text. Even instruction-tuned models retain this gap: they hallucinate less often, but never zero.
+There is no "Is this true?" signal in the training loss. The model was never optimised to verify causation, only to produce statistically plausible text. Even instruction-tuned models retain this gap: they hallucinate less often, but **never zero**.
 
-Of course, the obvious solution to "this model hallucinates sometimes" is to **just use a bigger, better model** (e.g. Claude, ChatGPT).
+Of course, the obvious solution to "*this model hallucinates sometimes*" is to **just use a bigger, better model** (e.g. Claude, ChatGPT).
 
 But because I wanted the whole process to be **completely free** (*as Claude's/ChatGPT's API costs money*), I decided to design an architecture around **making the model unable to misbehave** rather than buying my way to a model that behaves more often.
 
@@ -137,7 +137,7 @@ So I split the model layer in two by task:
   └───────────────────────────────┘       └──────────────────────────────┘
 ```
 
-The **reader** (Llama 3.3 70B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (Llama 4 Scout, a smaller mixture-of-experts (MoE) model) never sees the noise, only the handful that survived so it can spend all its attention on prose. Rank first, then generate.
+The **reader** (Llama 3.3 70B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (Llama 4 Scout, a smaller mixture-of-experts (MoE) model) never sees the noise, only the handful that survived so it can spend all its attention on prose.
 
 The reason this split helps is a property of how transformers process context. Attention is distributed across all tokens in the context window. When the context is full of irrelevant headlines, the model's ability to focus on the few that matter is diluted across noise. Giving the writer a pre-screened context means its attention is more efficiently allocated to signal rather than wasted on content the ranker already judged irrelevant.
 
