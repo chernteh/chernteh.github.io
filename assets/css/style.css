@@ -70,7 +70,7 @@
   --banner-glow:    radial-gradient(ellipse at 70% 50%, rgba(0,113,227,0.10) 0%, transparent 65%);
 
   /* code + syntax (Xcode Default Light) */
-  --code-bg:        #f8f9fb;
+  --code-bg:        #eaf2fd;
   --inline-code-bg: #ececf0;
   --code-base:      #1d1d1f;
   --sx-keyword:     #9b2393;
@@ -336,6 +336,9 @@ body {
   margin-bottom: 1.4rem;
   box-shadow: var(--exp-shadow);
 }
+
+/* Light: shadow-only experience card (mirrors project cards) */
+:root[data-theme="light"] .exp-card { border-color: transparent; }
 
 /* The only interactive zone: the company logo/image. */
 .exp-logo {
