@@ -220,7 +220,7 @@ I'll continue working on these next time!
 
 ## 9. If you want to build one for yourself too
 
-In any LLM pipeline there will be at least three distinct layers where inaccuracy can originate: the data source (stale, mismatched, or miscalculated feeds), the context construction (what you pipe into the model), and the model output itself. So remember to not jump straight into blaming the model. I would recommend to audit each layer independently.
+In any LLM pipeline there will be at least three distinct layers where inaccuracy can originate: the data source (stale, mismatched, or miscalculated feeds), the context construction (what you pipe into the model), and the model output itself. So remember not to jump straight to blaming the model. I would recommend to audit each layer independently.
 
 And for any LLM, its attention is finite. Attention is distributed across every token in the context window, so the more responsibilities a model holds simultaneously, the more its capacity is split across competing sub-tasks, degrading performance on each. The general principle is: one responsibility per model call. And your model will consistently perform better for it.
 
