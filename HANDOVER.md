@@ -290,6 +290,14 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 
 ## 10. Recent change history (most recent first, for context)
 
+### 2026-07-03 — Pluang card clickable (stretched link)
+
+- **Pluang Experience card is now whole-card clickable (commit a838d1e)** → Chern's LinkedIn post about
+  the internship. Implemented as `.exp-card--linked` modifier + `.exp-card-link` absolute overlay
+  (`inset:0; z-index:1`); the logo image and company name sit at `z-index:2` and still → pluang.com.
+  Hover = accent border + 2px lift. **The ASE card stays inert** — the "inert card body" rule now applies
+  only to cards *without* the modifier. Tracking params were stripped from the LinkedIn URL on purpose.
+
 ### 2026-07-03 — NDA-safe Pluang blurb + security review
 
 - **Pluang blurb rewritten (commit e87a2eb):** removed internal specifics (Looker→Tableau migration,
