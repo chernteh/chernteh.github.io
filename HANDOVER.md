@@ -258,6 +258,11 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
   *internal* link or missing image. Double-check `href`/`src` paths (root-relative, e.g. `/projects/`,
   `/assets/img/avatar.png`).
 - **Line endings:** Git warns `LF will be replaced by CRLF` on Windows. Harmless — ignore.
+- **Deploy triggers (gotchas, learned 2026-07-03):** (1) Back-to-back pushes CANCEL the in-flight deploy
+  (`concurrency: cancel-in-progress`) — batch related changes into ONE push, or the earlier run dies and
+  only the last push deploys. (2) **Empty commits do NOT trigger the workflow** — the `paths-ignore`
+  filter makes GitHub skip pushes that touch no files. To force a redeploy, either re-run the last run
+  from the Actions tab or push a commit that changes at least one non-ignored file.
 - **Commit/push discipline:** the owner wants changes shipped — commit and push to `main` after each
   agreed change. End commit messages with the Co-Authored-By trailer used in this repo's history.
 - **Images can't be created from chat.** If the owner pastes an image, ask them to save it into the repo
