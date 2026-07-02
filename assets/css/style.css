@@ -324,9 +324,12 @@ body {
 .project-tags span { background: var(--accent-soft); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 
 /* ── Experience cards (Apple-style, "Wide Media") ──
-   Only the LEFT image is clickable (→ company site). The card body is inert,
-   so the card can't be clicked by accident. Image fills its column edge-to-edge. */
+   The LEFT image + company name link to the company site. A card may additionally
+   carry .exp-card--linked + an .exp-card-link overlay (stretched link) that makes the
+   whole card clickable to a story URL; the logo/company links sit above it (z-index)
+   and keep their own destinations. Cards without the modifier stay inert. */
 .exp-card {
+  position: relative;                  /* containing block for .exp-card-link */
   display: flex;
   align-items: stretch;
   background: var(--card-bg);
@@ -336,6 +339,19 @@ body {
   margin-bottom: 1.4rem;
   box-shadow: var(--exp-shadow);
 }
+
+/* Whole-card stretched link (only on .exp-card--linked cards) */
+.exp-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.exp-card--linked { transition: border-color 0.2s ease, transform 0.2s ease; }
+.exp-card--linked:hover { border-color: var(--accent); transform: translateY(-2px); }
+.exp-card-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 20px; }
+/* Inner links stay clickable above the overlay */
+.exp-card--linked .exp-logo { z-index: 2; }
+.exp-card--linked .exp-company { position: relative; z-index: 2; }
 
 /* Light: shadow-only experience card (mirrors project cards) */
 :root[data-theme="light"] .exp-card { border-color: transparent; }
