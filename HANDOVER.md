@@ -290,6 +290,15 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 
 ## 10. Recent change history (most recent first, for context)
 
+### 2026-07-03 — NDA-safe Pluang blurb + security review
+
+- **Pluang blurb rewritten (commit e87a2eb):** removed internal specifics (Looker→Tableau migration,
+  "rebuilt end-to-end" claim, BigQuery/Mixpanel/Figma-via-MCP architecture). Now generic-safe, casual
+  first-person; final wording is Chern's own. **Do not re-add internal Pluang project details.**
+- **Security review:** standard GitHub Pages baseline confirmed; no vulnerabilities. Optional hardening
+  (SRI hash on the Font Awesome CDN `<link>`, self-hosting FA, CSP meta tag, Dependabot, branch
+  protection) reviewed and declined by Chern — treat as optional backlog, not defects.
+
 ### 2026-06-29 — Experience cards + content (final state)
 
 **Content finalised (commits 931bb79 → bd476a8):**
