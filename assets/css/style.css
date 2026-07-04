@@ -346,8 +346,11 @@ body {
   inset: 0;
   z-index: 1;
 }
-.exp-card--linked { transition: border-color 0.2s ease, transform 0.2s ease; }
+.exp-card--linked { transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
 .exp-card--linked:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+/* Light: match project-card hover exactly (soft blue ring + richer shadow, no plain accent border) */
+:root[data-theme="light"] .exp-card--linked:hover { border-color: var(--hover-ring); box-shadow: var(--exp-shadow-hover); }
 .exp-card-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 20px; }
 /* Inner links stay clickable above the overlay */
 .exp-card--linked .exp-logo { z-index: 2; }
