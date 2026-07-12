@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "I Built a Market-News Bot And Just Spent All My Time To Stop It From Lying"
+title: "I Built a Market-News Bot And Spent All My Time To Stop It From Lying"
 subtitle: "Guarding an Unattended LLM Against Confident Nonsense"
 description: "A small reflection on how I stopped a free, unattended LLM markets bot from confidently hallucinating."
 excerpt: "A free LLM that almost works great at summarising the market, until... you realise it's just confidently making things up. This is my current architecture to solve it."
@@ -28,10 +28,10 @@ Every morning, it repeats the workflow:
 1. **Pulls a pile of market headlines** and per-ticker company news.
 2. **Pulls closing prices** for the indices and for the holdings I track.
 3. **Checks an economic calendar for notable events** in the next week.
-4. Hands all of that to free LLMs (*Groq's free tier, running Llama models*) to **generate the report**.
+4. Hands all of that to free LLMs (*Groq's free tier*) to **generate the report**.
 5. **Sends me the generated report** via Telegram.
 
-- The intelligence layer is two free models on Groq's free tier: *Llama 3.3 70B & Llama 4 Scout*. 
+- The intelligence layer is two free models on Groq's free tier: *Qwen3.6 27B & Llama 4 Scout*. 
 - For news, there are three sources: public RSS feeds (MarketWatch, CNBC, Investing.com), per-ticker company news from Finnhub's API (`finnhub.io`)
 
 ## 2. The bot literally told me that peace was bad for gold
@@ -130,14 +130,14 @@ So I split the model layer in two by task:
 
 ```
   ┌──── STAGE 1 · the reader ─────┐       ┌──── STAGE 2 · the writer ────┐
-    Llama 3.3 70B                            Llama 4 Scout  (MoE)
+    Qwen3.6 27B                             Llama 4 Scout  (MoE)
     reads the full feed,                     sees only the shortlist,
     keeps the relevant few         ─────▶    writes the JSON brief
     (ranks and filters headlines)           (built for structured output)
   └───────────────────────────────┘       └──────────────────────────────┘
 ```
 
-The **reader** (Llama 3.3 70B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (Llama 4 Scout, a smaller mixture-of-experts (MoE) model) never sees the noise, only the handful that survived so it can spend all its attention on prose.
+The **reader** (Qwen3.6 27B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (Llama 4 Scout, a smaller mixture-of-experts (MoE) model) never sees the noise, only the handful that survived so it can spend all its attention on prose.
 
 The reason this split helps is a property of how transformers process context. Attention is distributed across all tokens in the context window. When the context is full of irrelevant headlines, the model's ability to focus on the few that matter is diluted across noise. Giving the writer a pre-screened context means its attention is more efficiently allocated to signal rather than wasted on content the ranker already judged irrelevant.
 
