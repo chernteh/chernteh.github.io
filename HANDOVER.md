@@ -137,8 +137,10 @@ A `<button class="theme-toggle" id="themeToggle">` sits inside `.banner` (top-ri
 It shows a moon icon (dark mode) or sun icon (light mode). JS at the bottom of `default.html` handles
 click — flips `data-theme` on `<html>` and writes `localStorage('theme', 'dark'|'light')`.
 
-**No-flash script** (inline in `<head>` of `default.html`): reads `localStorage` → OS
-`prefers-color-scheme` → defaults dark. Sets `data-theme` before first paint so there is no colour flash.
+**No-flash script** (inline in `<head>` of `default.html`): reads `localStorage`; anything other
+than an explicit saved `'dark'` gets **light** (owner's decision 2026-07-15 — the OS
+`prefers-color-scheme` is deliberately ignored; the toggle still saves an override). Sets
+`data-theme` before first paint so there is no colour flash.
 
 ### Layout model
 
@@ -343,7 +345,8 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 - Light theme (`:root[data-theme="light"]`): Apple Cupertino Light palette (off-white BG, Apple blue accent,
   Xcode Default Light syntax colours).
 - Added no-flash inline script in `<head>` of `default.html` (reads `localStorage` → OS `prefers-color-scheme`
-  → default dark; sets `data-theme` before paint).
+  → default dark; sets `data-theme` before paint). *(Superseded 2026-07-15: default is now LIGHT for
+  everyone; OS preference ignored; only an explicit saved `'dark'` yields dark — see Theme toggle section.)*
 - Added `.theme-toggle` button in `.banner` (moon icon = dark, sun = light; toggle JS at body bottom;
   persists via `localStorage`).
 - Introduced `--body-text` token (dark: `#d0d7de`, light: `#424245`) so normal paragraph text is visibly

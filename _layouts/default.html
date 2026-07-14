@@ -4,14 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Apply saved/OS theme before paint to avoid a flash of the wrong theme -->
+  <!-- Apply saved theme before paint to avoid a flash of the wrong theme.
+       Default is LIGHT for everyone (owner's choice, 2026-07-15) regardless of OS
+       prefers-color-scheme; the toggle still saves an explicit override. -->
   <script>
     (function () {
       try {
-        var t = localStorage.getItem('theme');
-        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
-      } catch (e) {}
+        if (localStorage.getItem('theme') !== 'dark') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
     })();
   </script>
   <meta name="description" content="{{ page.description | default: site.description }}">
