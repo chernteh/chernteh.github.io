@@ -137,7 +137,7 @@ So I split the model layer in two by task:
   └───────────────────────────────┘       └──────────────────────────────┘
 ```
 
-The **reader** (Qwen3.6 27B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (GPT-OSS 120B, a mixture-of-experts (MoE) model that activates only a fraction of its weights per token) never sees the noise, only the handful that survived so it can spend all its attention on prose. Its output is also locked to a strict JSON schema that the API enforces server-side — a malformed brief with invented field names is no longer merely *unlikely*, it is impossible by construction.
+The **reader** (Qwen3.6 27B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (GPT-OSS 120B, a mixture-of-experts (MoE) model) never sees the noise, only the handful that survived so it can spend all its attention on prose.
 
 The reason this split helps is a property of how transformers process context. Attention is distributed across all tokens in the context window. When the context is full of irrelevant headlines, the model's ability to focus on the few that matter is diluted across noise. Giving the writer a pre-screened context means its attention is more efficiently allocated to signal rather than wasted on content the ranker already judged irrelevant.
 
