@@ -31,7 +31,7 @@ Every morning, it repeats the workflow:
 4. Hands all of that to free LLMs (*Groq's free tier*) to **generate the report**.
 5. **Sends me the generated report** via Telegram.
 
-- The intelligence layer is two free models on Groq's free tier: *Qwen3.6 27B & Llama 4 Scout*. 
+- The intelligence layer is two free models on Groq's free tier: *Qwen3.6 27B & OpenAI's GPT-OSS 120B*. 
 - For news, there are three sources: public RSS feeds (MarketWatch, CNBC, Investing.com), per-ticker company news from Finnhub's API (`finnhub.io`)
 
 ## 2. The bot literally told me that peace was bad for gold
@@ -130,14 +130,14 @@ So I split the model layer in two by task:
 
 ```
   ┌──── STAGE 1 · the reader ─────┐       ┌──── STAGE 2 · the writer ────┐
-    Qwen3.6 27B                             Llama 4 Scout  (MoE)
+    Qwen3.6 27B                             GPT-OSS 120B  (MoE)
     reads the full feed,                     sees only the shortlist,
     keeps the relevant few         ─────▶    writes the JSON brief
-    (ranks and filters headlines)           (built for structured output)
+    (ranks and filters headlines)           (schema enforced by the API)
   └───────────────────────────────┘       └──────────────────────────────┘
 ```
 
-The **reader** (Qwen3.6 27B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (Llama 4 Scout, a smaller mixture-of-experts (MoE) model) never sees the noise, only the handful that survived so it can spend all its attention on prose.
+The **reader** (Qwen3.6 27B) does the judgement-heavy work of scoring the full feed down to a relevant shortlist. The **writer** (GPT-OSS 120B, a mixture-of-experts (MoE) model that activates only a fraction of its weights per token) never sees the noise, only the handful that survived so it can spend all its attention on prose. Its output is also locked to a strict JSON schema that the API enforces server-side — a malformed brief with invented field names is no longer merely *unlikely*, it is impossible by construction.
 
 The reason this split helps is a property of how transformers process context. Attention is distributed across all tokens in the context window. When the context is full of irrelevant headlines, the model's ability to focus on the few that matter is diluted across noise. Giving the writer a pre-screened context means its attention is more efficiently allocated to signal rather than wasted on content the ranker already judged irrelevant.
 
