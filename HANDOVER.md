@@ -297,6 +297,16 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 
 ## 10. Recent change history (most recent first, for context)
 
+### 2026-08-12 — ASE blurb written (placeholder retired)
+
+- **ASE Experience card blurb replaced** — the "Will update soon!" placeholder is gone; final wording is
+  Chern's own, pitched at the same generalised altitude as the Pluang card (domain + what changed, no
+  system names, no tools, no metrics). **Source of truth for what may be said about ASE:**
+  `docs/ase/ASE-CONTRIBUTIONS.md` §1 (public-naming rules) and §6 (never claim metrics — none were
+  measured). Internal system names, machine IDs, tag names, ports and file paths must **not** appear here.
+- **Still stale:** the ASE date range reads "June 2026 – Present"; the internship ended 6 Aug 2026.
+  Not changed in this commit — Chern hasn't confirmed the wording yet.
+
 ### 2026-07-03 — Pluang card clickable (stretched link)
 
 - **Pluang Experience card is now whole-card clickable (commit a838d1e)** → Chern's LinkedIn post about
@@ -319,7 +329,7 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
 **Content finalised (commits 931bb79 → bd476a8):**
 - Pluang description: first-person prose summary (Chern's own wording) covering Looker→Tableau
   migration, dbt+BigQuery pipelines, and production agentic AI system via MCP.
-- ASE description: "Will update soon!" placeholder — to be replaced when the role matures.
+- ASE description: "Will update soon!" placeholder — *(superseded 2026-08-12, see top of this section)*.
 - Date ranges: ASE "June 2026 – Present"; Pluang "Dec 2025 – May 2026".
 - Company name (`<a class="exp-company">`) styled as a link (hover underline) pointing to company site.
 
