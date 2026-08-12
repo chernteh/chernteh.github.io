@@ -304,8 +304,8 @@ increase the gap. (The owner previously asked to *enlarge* the TOC, so confirm d
   system names, no tools, no metrics). **Source of truth for what may be said about ASE:**
   `docs/ase/ASE-CONTRIBUTIONS.md` §1 (public-naming rules) and §6 (never claim metrics — none were
   measured). Internal system names, machine IDs, tag names, ports and file paths must **not** appear here.
-- **Still stale:** the ASE date range reads "June 2026 – Present"; the internship ended 6 Aug 2026.
-  Not changed in this commit — Chern hasn't confirmed the wording yet.
+- **Date range fixed (2026-08-12 follow-up):** "June 2026 – Present" → "June 2026 – August 2026",
+  matching the internship's actual end date.
 
 ### 2026-07-03 — Pluang card clickable (stretched link)
 
