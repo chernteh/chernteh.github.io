@@ -24,7 +24,7 @@ So I built a bot. Every morning it pulls market headlines and closing prices, ru
   <figcaption>
     <p>A real brief, sent on 26 September 2026 as the recap of Friday's session. Reading it top to bottom:</p>
     <ol>
-      <li><strong>Summary:</strong> a short recap of how the overall market did that day: whether stocks went up or down, which sectors did best and worst, and the wider news behind it, such as interest rates, oil prices and world events.</li>
+      <li><strong>Summary:</strong> a short recap of how the overall market did that day: whether stocks went up or down, which sectors did best and worst, and the wider news behind it, such as interest rates, oil prices and world events. To write it, a first model picks the headlines most relevant to my holdings, and a second model drafts the recap from those headlines. Python then adds the index figures itself and deletes any sentence that breaks a known rule, such as claiming peace lifted gold.</li>
       <li><strong>Events (7 days):</strong> scheduled macro releases and earnings for the coming week.</li>
       <li><strong>Holdings:</strong> each ticker's price information, then a short explanation of the move. When no headline explains a move, the bot says so ("No clear catalyst" or "driver unconfirmed") instead of inventing a reason.</li>
     </ol>
