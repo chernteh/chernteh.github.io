@@ -1,15 +1,12 @@
 ---
 layout: post
-title: "I Built a Market-News Bot And Spent All My Time To Stop It From Lying"
-subtitle: "Guarding an Unattended LLM Against Confident Nonsense"
+title: "Market-News Bot: Guarding an Unattended LLM Against Hallucination"
 description: "A small reflection on how I stopped a free, unattended LLM markets bot from confidently hallucinating."
 excerpt: "A free LLM that almost works great at summarising the market, until... you realise it's just confidently making things up. This is my current architecture to solve it."
 date: 2026-06-27
 ---
 
-# I Built a Market-News Bot And Spent All My Time To Stop It From Lying
-
-### Guarding an Unattended LLM Against Confident Nonsense
+# Market-News Bot: Guarding an Unattended LLM Against Hallucination
 
 
 *~10 min read*
