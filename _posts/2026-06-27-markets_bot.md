@@ -161,7 +161,7 @@ Free data feeds disagree with each other more than you'd expect. Not dramaticall
 
 So instead of trusting one source, I poll four: my broker's feed (moomoo's OpenD), Finnhub, yfinance, and Twelve Data. Then make them vote.
 
-The rule is simple: **a price is only allowed into the brief if at least two independent sources agree on it to within a percentage point.** If the most trusted source stands alone against the others, it loses. If all four disagree, the number still goes out, but with a visible "verify" flag attached.
+I implemented this rule: **a price is only allowed into the brief if at least two independent sources agree on it to within a percentage point.** If the most trusted source stands alone against the others, it loses. If all four disagree, the number still goes out, but with a visible "verify" flag attached.
 
 ## 7. Catching claims that are false or that don't make sense
 
@@ -171,9 +171,7 @@ Even with verified numbers and complete context, the model still writes sentence
 
 **(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is firm: de-escalation cannot be cited as the *cause* of a rally. The guard catches the claim whether it sits in the same sentence (*"gold rose on the truce"*) or is split over two (*"…the two sides reached a truce. This lifted gold."*). The guard stops that sentence making the claim from passing through to avoid reporting potential false causation.
 
-The guard does not rewrite these sentences into correct explanations. It **deletes** them after the detections are positive.
-
-Running underneath both sanity checks is a single governing discipline: **when in doubt, reject, don't patch.** So the system's failure mode is silence. *"No clear catalyst in today's headlines"* is allowed to be the final word with no hedging after it.
+Note that the guard does not rewrite these sentences into correct explanations. It deletes them after the detections are positive.
 
 ## 8. Limitations
 
