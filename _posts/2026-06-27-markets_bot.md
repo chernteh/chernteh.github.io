@@ -169,7 +169,7 @@ Even with verified numbers and complete context, the model still writes sentence
 
 **(i) Direction sanity.** The model would sometimes lead with a narrative that contradicted the very price it was explaining: *"Silver collapsed on profit-taking…"* on a day SLV closed up over 5%. It had a bearish story cached and reached for it regardless of the tape. The guard judges the **lead clause** against the actual price direction, because the lead clause is where the model smuggles in the stale story before walking it back with a qualifier.
 
-**(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is absolute: de-escalation cannot be cited as the *cause* of a rally. The guard catches it both within a sentence (*"gold rose on the truce"*) and across sentences (*"…the two sides reached a truce. This lifted gold."*). A plain *"gold rose"* is kept; only the sentence that blames the truce for the rally is removed.
+**(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is firm: de-escalation cannot be cited as the *cause* of a rally. The guard catches the claim whether it sits in the same sentence (*"gold rose on the truce"*) or is split over two (*"…the two sides reached a truce. This lifted gold."*). The guard stops that sentence making the claim from passing through to avoid reporting potential false causation.
 
 The guard does not rewrite these sentences into correct explanations. It **deletes** them after the detections are positive.
 
