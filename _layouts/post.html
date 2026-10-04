@@ -67,3 +67,33 @@ layout: default
   headings.forEach(function (h) { observer.observe(h); });
 })();
 </script>
+
+<script>
+// Figure lightbox: clicking a .post-figure image opens it in a modal <dialog> with a close
+// button; Esc (native to showModal) and a click outside the image also close it. Without JS,
+// or without <dialog> support, the link still opens the image file directly.
+(function () {
+  var links = document.querySelectorAll('article .post-figure a');
+  if (links.length === 0 || typeof HTMLDialogElement === 'undefined') return;
+
+  var dlg = document.createElement('dialog');
+  dlg.className = 'lightbox';
+  dlg.setAttribute('aria-label', 'Image viewer');
+  dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close image">&times;</button><img alt="">';
+  document.body.appendChild(dlg);
+  var img = dlg.querySelector('img');
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var thumb = a.querySelector('img');
+      img.src = a.href;
+      img.alt = thumb ? thumb.alt : '';
+      dlg.showModal();
+    });
+  });
+
+  dlg.querySelector('.lightbox-close').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+})();
+</script>
