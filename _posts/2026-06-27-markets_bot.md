@@ -120,9 +120,6 @@ The model is sandwiched between two layers of code:
    before the model sees'               still lie'                    ever reaches me'              
 ```
 
-- Inputs are made *true* before the model ever sees them.
-- Outputs are *checked* before they ever reach me.
-
 ## 5. The two-model layer: a reader and a writer
 
 The second seam runs inside the model layer, and it's where I made the biggest mistake before getting it right.
