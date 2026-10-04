@@ -163,15 +163,13 @@ So instead of trusting one source, I poll four: my broker's feed (moomoo's OpenD
 
 The rule is simple: **a price is only allowed into the brief if at least two independent sources agree on it to within a percentage point.** If the most trusted source stands alone against the others, it loses. If all four disagree, the number still goes out, but with a visible "verify" flag attached.
 
-It managed to catch a real bug too: QQQM was periodically printing the *index's* percentage instead of its own, and the two-source agreement rule quietly refused to publish the bad figure until a second source backed it up.
-
 ## 7. Catching claims that are false or that don't make sense
 
 Even with verified numbers and complete context, the model still writes sentences that are simply *wrong*, not factually, but in their logic, their causation, or their internal coherence. Every rule in this section started as a prompt instruction the model eventually violated, and was moved to code. Each guard is a rule constraining a probabilistic output, a guardrailed pipeline where the model handles language and the guards enforce hard constraints the model cannot override.
 
-**(i) Direction sanity.** The model would sometimes lead with a narrative that contradicted the very price it was explaining: *"Silver collapsed on profit-taking…"* on a day SLV closed up over 5%. It had a bearish story cached and reached for it regardless of the tape. The guard judges the **lead clause** against the actual price direction, because the lead clause is where the model smuggles in the stale story before walking it back with a qualifier. In practice, it only reads the part of the sentence before the first "but" or "despite", and ignores moves smaller than 0.3%, which are too small to call either way.
+**(i) Direction sanity.** The model would sometimes lead with a narrative that contradicted the very price it was explaining: *"Silver collapsed on profit-taking…"* on a day SLV closed up over 5%. It had a bearish story cached and reached for it regardless of the tape. The guard judges the **lead clause** against the actual price direction, because the lead clause is where the model smuggles in the stale story before walking it back with a qualifier.
 
-**(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is absolute: de-escalation cannot be cited as the *cause* of a rally. The guard catches it both within a sentence (*"gold rose on the truce"*) and across sentences (*"…the two sides reached a truce. This lifted gold."*), and the sentence splitter is abbreviation-aware so a stray "U.S." can't hide the clause boundary. A plain *"gold rose"* is kept; only the sentence that blames the truce for the rally is removed.
+**(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is absolute: de-escalation cannot be cited as the *cause* of a rally. The guard catches it both within a sentence (*"gold rose on the truce"*) and across sentences (*"…the two sides reached a truce. This lifted gold."*). A plain *"gold rose"* is kept; only the sentence that blames the truce for the rally is removed.
 
 The guard does not rewrite these sentences into correct explanations. It **deletes** them after the detections are positive.
 
