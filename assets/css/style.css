@@ -523,7 +523,12 @@ article h2, article h3 { scroll-margin-top: 3.5rem; }
 /* In-post figure: a portrait screenshot capped near phone width (click opens full size), caption kept readable beneath it */
 .page-body .post-figure { margin: 1.5rem 0 1.75rem; }
 .page-body .post-figure img { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--exp-shadow); }
-.page-body .post-figure figcaption { max-width: 560px; margin: 0.75rem auto 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; text-align: center; }
+.page-body .post-figure figcaption { max-width: 600px; margin: 0.9rem auto 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+.page-body .post-figure figcaption p,
+.page-body .post-figure figcaption li { color: inherit; line-height: inherit; }
+.page-body .post-figure figcaption p { margin-bottom: 0.4rem; }
+.page-body .post-figure figcaption ol { margin: 0; padding-left: 1.25rem; }
+.page-body .post-figure figcaption strong { color: var(--body-text); }
 
 /* ── Syntax highlighting (themed: VS Code Dark+ / Xcode Light) ── */
 .highlight { background: var(--code-bg); border-radius: 8px; margin: 1.25rem 0; border: 1px solid var(--border); }
