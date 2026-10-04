@@ -46,7 +46,7 @@ Every morning, it repeats the workflow:
 - The intelligence layer is two free models on Groq's free tier: *Qwen3.6 27B & OpenAI's GPT-OSS 120B*. 
 - For news, there are three sources: public RSS feeds (MarketWatch, CNBC, Investing.com), per-ticker company news from Finnhub's API (`finnhub.io`)
 
-## 2. The bot literally told me that peace was bad for gold
+## 2. The bot literally told me that peace was good for gold
 One morning my bot opened the market brief with:
 
 > *"Gold rallied as the ceasefire eased tensions across the region."*
@@ -240,4 +240,4 @@ The biggest realisation is that I had been approaching the problem backwards. Ev
 
 So if there's one transferable lesson, it would be **instead of trying to make the model behave, you can consider making the system unable to misbehave.**
 
-At least now it no longer gets to tell me that peace is bad for gold.
+At least now it no longer gets to tell me that peace is good for gold.
