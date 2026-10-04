@@ -159,24 +159,7 @@ With the model constrained, the next weak point was one layer back, the raw data
 
 Free data feeds disagree with each other more than you'd expect. Not dramatically, but enough to matter. One feed hasn't updated since the close, another is reporting a split-adjusted price as if it were today's. If you pipe a single source straight into the brief, you eventually report a number that's false.
 
-So instead of trusting one source, I poll four: my broker's feed (moomoo's OpenD), Finnhub, yfinance, and Twelve Data. Then make them vote. The arbitration logic is the following:
-
-```python
-# only publish a price if at least two sources agree on it
-def arbitrate(sources, tol_pp=1.0):
-    primary = sources.get("moomoo")
-    if primary is not None:
-        # broker feed wins the moment any other source backs it up
-        for name, other in sources.items():
-            if name != "moomoo" and abs(primary["pct"] - other["pct"]) <= tol_pp:
-                return primary, None
-
-    # no agreement found: use the biggest agreeing cluster, or fall back and flag it
-    agreeing = _largest_cluster(sources, tol_pp)
-    if agreeing:
-        return agreeing[0], None
-    return _most_trusted(sources), "sources disagree: verify"
-```
+So instead of trusting one source, I poll four: my broker's feed (moomoo's OpenD), Finnhub, yfinance, and Twelve Data. Then make them vote.
 
 The rule is simple: **a price is only allowed into the brief if at least two independent sources agree on it to within a percentage point.** If the most trusted source stands alone against the others, it loses. If all four disagree, the number still goes out, but with a visible "verify" flag attached.
 
@@ -186,36 +169,9 @@ It managed to catch a real bug too: QQQM was periodically printing the *index's*
 
 Even with verified numbers and complete context, the model still writes sentences that are simply *wrong*, not factually, but in their logic, their causation, or their internal coherence. Every rule in this section started as a prompt instruction the model eventually violated, and was moved to code. Each guard is a rule constraining a probabilistic output, a guardrailed pipeline where the model handles language and the guards enforce hard constraints the model cannot override.
 
-**(i) Direction sanity.** The model would sometimes lead with a narrative that contradicted the very price it was explaining: *"Silver collapsed on profit-taking…"* on a day SLV closed up over 5%. It had a bearish story cached and reached for it regardless of the tape. The guard judges the **lead clause** against the actual price direction, because the lead clause is where the model smuggles in the stale story before walking it back with a qualifier:
+**(i) Direction sanity.** The model would sometimes lead with a narrative that contradicted the very price it was explaining: *"Silver collapsed on profit-taking…"* on a day SLV closed up over 5%. It had a bearish story cached and reached for it regardless of the tape. The guard judges the **lead clause** against the actual price direction, because the lead clause is where the model smuggles in the stale story before walking it back with a qualifier. In practice, it only reads the part of the sentence before the first "but" or "despite", and ignores moves smaller than 0.3%, which are too small to call either way.
 
-```python
-# catch when the opening sentence says the opposite of what the price did
-# (ignore moves < 0.3%, not worth flagging)
-def sentiment_contradicts(pct, text):
-    if abs(pct) < 0.30:
-        return False
-    lead = QUALIFIER.split(text)[0]   # everything before the first "but" or "despite"
-    return (pct > 0 and BEAR_WORDS.search(lead)) or (pct < 0 and BULL_WORDS.search(lead))
-```
-
-**(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is absolute: de-escalation cannot be cited as the *cause* of a rally. The guard catches it both within a sentence (*"gold rose on the truce"*) and across sentences (*"…the two sides reached a truce. This lifted gold."*), and the sentence splitter is abbreviation-aware so a stray "U.S." can't hide the clause boundary:
-
-```python
-# drop any sentence that blames peace/de-escalation for a gold or silver rally
-# "gold rose" is fine to keep, only the false causal link gets removed
-def scrub_causal_inversions(text):
-    kept, deesc_context = [], False
-    for s in split_sentences(text):
-        lead = QUALIFIER.split(s)[0]
-        has_deesc = DEESCALATION.search(lead) and not ESCALATION.search(lead)
-        if SAFE_HAVEN_UP.search(lead) and has_deesc:
-            continue   # caught it within the same sentence
-        if deesc_context and SAFE_HAVEN_CAUSAL_UP.search(lead) and not ESCALATION.search(lead):
-            continue   # caught it bleeding across into the next sentence
-        kept.append(s)
-        deesc_context = deesc_context or has_deesc
-    return " ".join(kept)
-```
+**(ii) Causal-direction sanity.** This is the gold-and-peace lie from the opening, and it gets its own guard because the *direction of the causation* is what's wrong, not the facts. For safe-haven assets, the rule is absolute: de-escalation cannot be cited as the *cause* of a rally. The guard catches it both within a sentence (*"gold rose on the truce"*) and across sentences (*"…the two sides reached a truce. This lifted gold."*), and the sentence splitter is abbreviation-aware so a stray "U.S." can't hide the clause boundary. A plain *"gold rose"* is kept; only the sentence that blames the truce for the rally is removed.
 
 The guard does not rewrite these sentences into correct explanations. It **deletes** them after the detections are positive.
 
