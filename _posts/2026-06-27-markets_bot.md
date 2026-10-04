@@ -88,17 +88,13 @@ And it worked. Well... most of the time.
 
 But **"most of the time"** isn't good enough when failure only needs to happen once, especially for an unattended model. On the one morning the headlines were unusually persuasive, the model quietly violated the instruction anyway.
 
-The reason is because the **weights are frozen** at inference time, a system prompt cannot permanently teach the model a rule. **The instruction exists only as tokens** in the current context window, competing with **everything else** the model reads. It **has no special authority** over the weights, which is why a persuasive enough input can override it.
+The reason is because the **weights are frozen** at inference time, a system prompt cannot permanently teach the model a rule. **The instruction exists only as tokens** in the current context window, competing with everything else the model reads. It **has no special authority** over the weights, which is why a persuasive enough input can override it.
 
-And you might reasonably think: *Why not run a second model to QA the first?* 
+And you might reasonably think: *Why not run a second model to QA the first?*
 
-That is a legitimate and sound technique, but it doesn't resolve the core issue. A QA model would just be another probabilistic component that can be wrong sometimes... and now you have two models that can hallucinate instead of one. For a bot that runs unattended with no human backstop, I didn't want correctness to be **probable**, I wanted the things that must never happen to be **impossible**. That is a job for code instead, not for a better-behaved model.
+That is a legitimate technique, but it doesn't resolve the core issue. A QA model would just be another probabilistic component that can be wrong sometimes... and now you would have two models that can hallucinate instead of one. For a bot that runs unattended with no human backstop, I didn't want correctness to be probable, I wanted the things that must never happen to be impossible. I figured this is a job for code instead, not for a better-behaved model.
 
-So I stopped negotiating with the model and started constraining it instead. And I proceeded to build the project on the basis that:
-
- **Numbers are Python's job.**
-
-The model never sees a number it is allowed to invent. It does not compute the S&P's daily return, it does not decide whether gold is "up sharply" or "roughly flat," and it does not get to quote a percentage from memory. Python fetches every figure, verifies it, formats it, and pastes it in. The model then writes the story *around the numbers*, but never the numbers themselves.
+So I stopped negotiating with the model and started constraining it instead. And I proceeded to build the project on the basis that **the model should never be the source of a number**. Every price and index figure in the brief is fetched, cross-checked and formatted by Python, and the model's only job is to **write the explanation** around the figures it has been handed.
 
 In a nutshell, this is a **division of labour**, and it runs along **two seams**.
 
