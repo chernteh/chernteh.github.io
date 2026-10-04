@@ -24,10 +24,9 @@ So I built a bot. Every morning it pulls market headlines and closing prices, ru
   <figcaption>
     <p>A real brief, sent on 26 September 2026 as the recap of Friday's session. Reading it top to bottom:</p>
     <ol>
-      <li><strong>Summary:</strong> the index line (S&amp;P 500 and Nasdaq, shown "via" their tracking ETFs when the index feed is missing) is rendered by Python. The model writes only the narrative around it: market tone, leading and lagging sectors, and the macro backdrop. Weekday briefs also add a Pre-Market outlook; Saturday's recap leaves it out.</li>
-      <li><strong>Events (7 days):</strong> scheduled macro releases and earnings for the coming week, each with a countdown.</li>
-      <li><strong>Holdings:</strong> each ticker's daily change, closing price and after-hours price, then a short explanation of the move. Each <em>(ID n)</em> tag cites the headline the claim came from. When no headline explains a move, the bot says so ("No clear catalyst", or META's "driver unconfirmed") instead of inventing a reason. Index ETFs also carry the week's major macro events, here Non-Farm Payrolls.</li>
-      <li><strong>Footer:</strong> which data source supplied the prices after cross-checking, and which model wrote the text.</li>
+      <li><strong>Summary:</strong> a short recap of how the overall market did that day: whether stocks went up or down, which sectors did best and worst, and the wider news behind it, such as interest rates, oil prices and world events.</li>
+      <li><strong>Events (7 days):</strong> scheduled macro releases and earnings for the coming week.</li>
+      <li><strong>Holdings:</strong> each ticker's price information, then a short explanation of the move. When no headline explains a move, the bot says so ("No clear catalyst" or "driver unconfirmed") instead of inventing a reason.</li>
     </ol>
   </figcaption>
 </figure>
