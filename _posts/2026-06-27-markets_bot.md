@@ -19,6 +19,11 @@ I usually don't have the time or the attention span to keep up with how the mark
 
 So I built a bot. Every morning it pulls market headlines and closing prices, runs them through a free LLM, and sends me a market brief over Telegram. No human reviews it. No premium API costs. Just an automated daily summary for me to keep up with the news.
 
+<figure class="post-figure">
+  <a href="/assets/img/markets-bot-brief.png" title="Open full size"><img src="/assets/img/markets-bot-brief.png" alt="Telegram screenshot of the bot's Friday recap for 25 September 2026: a market summary, the week's upcoming events, and six holdings with closing and after-hours prices and a one-line explanation each" width="654" height="1024" loading="lazy"></a>
+  <figcaption>A real brief, sent on 26 September 2026 as the recap of Friday's session. Every price and index figure is rendered by Python, not written by the model. Each <em>(ID n)</em> tag cites the headline a claim came from, and META's "driver unconfirmed" is the bot declining to invent a reason when no headline explains the move.</figcaption>
+</figure>
+
 **But the catch is:** when a model is unattended, it will occasionally tell you something **very wrong with absolute confidence**, I believe that everyone has encountered it one way or another and would typically call it by its industry term, **hallucination**.
 
 ## 1. How The Bot Works
