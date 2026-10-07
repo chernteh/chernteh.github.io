@@ -43,7 +43,7 @@ Every morning, it repeats the workflow:
 - The intelligence layer is two free models on Groq's free tier: *Qwen3.6 27B & OpenAI's GPT-OSS 120B*. 
 - For news, there are three sources: public RSS feeds (MarketWatch, CNBC, Investing.com), per-ticker company news from Finnhub's API (`finnhub.io`)
 
-## 2. The bot literally told me that peace was good for gold
+## 2. The Issue: The bot told me that peace was good for gold
 One morning my bot opened the market brief with:
 
 > *"Gold rallied as the ceasefire eased tensions across the region."*
@@ -71,7 +71,7 @@ Of course, the obvious solution to "*this model hallucinates sometimes*" is to *
 
 But because I wanted the whole process to be **completely free** (*as Claude's/ChatGPT's API costs money*), I decided to design an architecture around **making the model unable to misbehave** rather than buying my way to a model that behaves more often.
 
-## 3. A rule in a prompt is a request, a rule in code is a guarantee
+## 3. Prompt vs Code
 
 Here's the thing I learned:
 
