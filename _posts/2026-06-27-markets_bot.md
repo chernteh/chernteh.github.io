@@ -75,7 +75,7 @@ But because I wanted the whole process to be **completely free** (*as Claude's/C
 
 Here's the thing I learned:
 
-> **You cannot completely fix a hallucination by adding a sentence to the prompt. Because at the end of the day, a rule in the prompt is just a request. But a rule in code is guaranteed.**
+> **Adding a sentence to the prompt can make a hallucination less likely, but it can't rule it out. The model can still ignore the instruction. A check written in code always runs.**
 
 When the model wrote that peace lifted gold prices, my first instinct was to **edit the prompt**:
 
